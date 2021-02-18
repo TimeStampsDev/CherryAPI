@@ -38,11 +38,12 @@ public class User {
     public String getUsername() { return username; }
 
     /**
+     * In order from oldest to newest.
      * @return name history retrieved by @MojangAPI
      */
-    public List<TimeStampName> getNameHistory() {
+    public TimeStampName[] getNameHistory() {
         try {
-            return MojangAPI.getUsernameHistory(this.uuid).get(this.uuid);
+            return MojangAPI.getUsernameHistory(this.uuid);
         } catch (IOException | MojangAPIException e) {
             e.printStackTrace();
         }

@@ -1,5 +1,6 @@
 package net.cherryflavor.api.bungee.player;
 
+import net.cherryflavor.api.bungee.ProxyAPI;
 import net.cherryflavor.api.database.users.User;
 import net.cherryflavor.api.tools.TextFormat;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -14,7 +15,22 @@ public class BungeePlayer extends User {
 
     public BungeePlayer(UUID uuid) {
         super(uuid);
+        this.player = ProxyAPI.getAPI().getOnlinePlayer(uuid);
     }
+    public BungeePlayer(ProxiedPlayer player) {
+        super (player.getUniqueId());
+        this.player = player;
+    }
+
+    public void addPermission(String permission) {
+        player.getPermissions().add(permission);
+    }
+
+    public void removePermission(String permission) {
+        player.getPermissions().remove(permission);
+    }
+
+    public boolean hasPermission(String permission) { return player.hasPermission(permission); }
 
     public void sendMessage(String... message) {
         for (String m : message) {

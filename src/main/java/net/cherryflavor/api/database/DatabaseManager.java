@@ -1,9 +1,9 @@
 package net.cherryflavor.api.database;
 
+import net.cherryflavor.api.bungee.ProxyAPI;
 import net.cherryflavor.api.configuration.CherryConfig;
 import net.cherryflavor.api.exceptions.InvalidAPIObjectException;
-import net.md_5.bungee.api.plugin.Plugin;
-import org.bukkit.plugin.java.JavaPlugin;
+import net.cherryflavor.api.spigot.ServerAPI;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,6 +12,9 @@ import java.util.List;
 public class DatabaseManager {
 
     private List<Database> databaseList;
+    private CherryConfig config;
+
+    private static boolean debug;
 
     public Object api;
 
@@ -19,30 +22,46 @@ public class DatabaseManager {
         this.databaseList = new ArrayList<>();
 
         this.api = api;
+
+        createFolder();
+        createConfigFile();
     }
 
-    public Object getAPI() { return api; }
+    public Object getAPI() {
+        if (api instanceof ServerAPI) {
+            return api;
+        } else if (api instanceof ProxyAPI) {
+            return api;
+        } else {
+            try {
+                throw new InvalidAPIObjectException("Invalid api type");
+            } catch (InvalidAPIObjectException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
     public static void initFilesFor(Database database) {
         CherryConfig.createFile(database.getCherryConfig().getFile());
     }
 
     public static void createFolder() {
-        CherryConfig.makeFolder("databases");
+        CherryConfig.makeFolder("plugins/CherryAPI/databases");
     }
 
-    private static File getDataFolder(Object api) throws InvalidAPIObjectException {
-        if (api instanceof JavaPlugin) {
-            return ((JavaPlugin) api).getDataFolder();
-        } else if (api instanceof Plugin) {
-            return ((Plugin) api).getDataFolder();
-        } else {
-            throw new InvalidAPIObjectException("Object provided is not a JavaPlugin or Plugin");
-        }
+    public void createConfigFile() {
+        CherryConfig.createResource("databases-config.yml", new File(CherryConfig.getDataFolder(), "/databases/databases-config.yml"));
+
+        config = new CherryConfig(new File(CherryConfig.getDataFolder(), "databases/databases-config.yml"));
+
+        debug = config.getConfig().getBoolean("debug");
     }
 
     public static void debug(String debugMessage) {
-        System.out.println("[DatabaseManager] " + debugMessage);
+        if (debug == true) {
+            System.out.println("[DatabaseManager] " + debugMessage);
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package net.cherryflavor.api.bungee.chat;
 
+import net.cherryflavor.api.mojang.GameAchievements;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
@@ -30,19 +31,6 @@ public class HoverComponent {
     }
 
     /**
-     * Shows text, and when clicked opens url
-     * @param show
-     * @param url
-     * @return
-     */
-    public TextComponent showTextAndOpenURL(String show, String url) {
-        this.action = HoverEvent.Action.SHOW_TEXT;
-        TextComponent newHoverEvent = new ClickComponent(hoverText).openURL(url);
-        newHoverEvent.setHoverEvent(new HoverEvent(action, TextComponent.fromLegacyText(show)));
-        return newHoverEvent;
-    }
-
-    /**
      * Shows show
      * @param show
      * @return
@@ -50,25 +38,6 @@ public class HoverComponent {
     public TextComponent showText(String... show) {
         this.action = HoverEvent.Action.SHOW_TEXT;
         TextComponent newHoverEvent = new TextComponent(hoverText);
-        ComponentBuilder builder = new ComponentBuilder();
-
-        for (String t : show) {
-            builder.append(show + "\n");
-        }
-
-        newHoverEvent.setHoverEvent(new HoverEvent(action, builder.create()));
-        return newHoverEvent;
-    }
-
-    /**
-     * Shows text, and when clicked opens url
-     * @param url
-     * @param show
-     * @return
-     */
-    public TextComponent showTextAndOpenURL(String url, String... show) {
-        this.action = HoverEvent.Action.SHOW_TEXT;
-        TextComponent newHoverEvent = new ClickComponent(hoverText).openURL(url);
         ComponentBuilder builder = new ComponentBuilder();
 
         for (String t : show) {
@@ -93,19 +62,6 @@ public class HoverComponent {
     }
 
     /**
-     * Shows text, opens url
-     * @param show
-     * @return
-     */
-    public BaseComponent componentShowTextAndOpenURL(String show, String url) {
-        this.action = HoverEvent.Action.SHOW_TEXT;
-        ComponentBuilder builder = new ComponentBuilder();
-        builder.append(new ClickComponent(hoverText).openURL(url));
-        builder.event(new HoverEvent(action, TextComponent.fromLegacyText(show)));
-        return builder.create()[0];
-    }
-
-    /**
      * Shows text
      * @param show
      * @return
@@ -122,19 +78,15 @@ public class HoverComponent {
     }
 
     /**
-     * Shows text
-     * @param show
+     * Shows achievement description
+     * @param achievement
      * @return
      */
-    public BaseComponent componentsShowTextAndOpenURL(String url, String... show) {
+    public TextComponent showAchievement(GameAchievements achievement) {
         this.action = HoverEvent.Action.SHOW_TEXT;
-        ComponentBuilder builder = new ComponentBuilder(hoverText);
-        ComponentBuilder showBuilder = new ComponentBuilder();
-        for (String t : show) {
-            showBuilder.append(t);
-        }
-        builder.event(new HoverEvent(action, showBuilder.create()));
-        return builder.create()[0];
+        TextComponent newHoverEvent = new TextComponent("[" + achievement.getAchievementLabel() + "]");
+        newHoverEvent.setHoverEvent(new HoverEvent(action, TextComponent.fromLegacyText(achievement.getDescription())));
+        return newHoverEvent;
     }
 
 }

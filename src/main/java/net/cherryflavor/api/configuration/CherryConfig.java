@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class CherryConfig {
 
@@ -28,12 +29,17 @@ public class CherryConfig {
         }
     }
 
+    public static File getDataFolder() {
+        return new File("plugins/CherryAPI");
+    }
+
     public File getFile() { return this.file; }
     public Configuration getConfig() { return this.configuration; }
 
     private static boolean fileExists(String fileName) {
-        return new File(fileName).exists();
+        return new File("plugins/CherryAPI/" + fileName).exists();
     }
+
 
     private Configuration loadConfigOfFile(File file) {
         Configuration config = null;
@@ -45,12 +51,12 @@ public class CherryConfig {
         return config;
     }
 
-    public final InputStream getResourceAsStream(String resource) {
-        return this.getClass().getClassLoader().getResourceAsStream(resource);
+    public static final InputStream getResourceAsStream(String resource) {
+        return CherryConfig.class.getClassLoader().getResourceAsStream(resource);
     }
 
     public static void makeFolder(String folderName) {
-        new File(folderName).mkdir();
+        new File(folderName).mkdirs();
     }
 
     public static void createFile(File file) {
@@ -67,6 +73,16 @@ public class CherryConfig {
         if (!fileExists(filePath)) {
             try (InputStream in = CherryConfig.class.getResourceAsStream(filePath)) {
                 Files.copy(in, new File(filePath).toPath());
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+    }
+
+    public static void createResource(String resourceName, File toPath) {
+        if (!toPath.exists()) {
+            try (InputStream in = getResourceAsStream(resourceName)) {
+                Files.copy(in, toPath.toPath());
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

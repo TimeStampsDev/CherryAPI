@@ -24,7 +24,7 @@ public class YamlConfiguration extends ConfigurationProvider {
         protected Yaml initialValue() {
             Representer representer = new Representer() {
                 {
-                    this.representers.put(net.md_5.bungee.config.Configuration.class, new Represent() {
+                    this.representers.put(Configuration.class, new Represent() {
                         public Node representData(Object data) {
                             return represent(((Configuration)data).self);
                         }

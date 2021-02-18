@@ -1,32 +1,34 @@
 package net.cherryflavor.api.mojang;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import net.cherryflavor.api.exceptions.MojangAPIException;
+import net.cherryflavor.api.mojang.resources.Status;
 import net.cherryflavor.api.mojang.resources.TimeStampName;
-import org.apache.commons.lang.ObjectUtils;
+import net.cherryflavor.api.tools.TextFormat;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;
+import java.net.URL;;
 import java.util.*;
 
 public class MojangAPI {
 
     private static JsonParser jsonParser = new JsonParser();
+    private static Gson gsonParser = new Gson();
 
     /**
      * @param uuid
      * @return the current name of user
      * @throws MojangAPIException
      */
-
     public static String getCurrentName(UUID uuid) throws MojangAPIException {
         String username = null;
         try {
-            username = getUsernameHistory(uuid).get(uuid).get(0).getUsername();
+            TimeStampName[] nameHist = getUsernameHistory(uuid);
+            username = nameHist[nameHist.length-1].getUsername();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -44,49 +46,62 @@ public class MojangAPI {
      * @throws IOException
      * @throws MojangAPIException
      */
-
-    public static Map<UUID, List<TimeStampName>> getUsernameHistory(UUID uuid) throws MojangAPIException, IOException {
+    public static TimeStampName[] getUsernameHistory(UUID uuid) throws MojangAPIException, IOException {
         String validID = uuid.toString().replace("-","");
         List<TimeStampName> nameHistory = new ArrayList<>();
 
         Map<UUID, List<TimeStampName>> usernameHistory = new HashMap<>();
 
+        String response = getRawJsonResponse(new URL("https://api.mojang.com/user/profiles/" + validID + "/names"));
+
+        TimeStampName[] names = gsonParser.fromJson(response, TimeStampName[].class);
+        return names;
+    }
+
+    public static Status[] getServiceStatus() throws IOException {
+        String url = "https://status.mojang.com/check";
+        String response = getRawJsonResponse(new URL(url));
+
+        Status[] statuses = gsonParser.fromJson(response, Status[].class);
+
+        statuses[0].setService("minecraft.net");
+        statuses[1].setService("session.minecraft.net");
+        statuses[2].setService("account.mojang.com");
+        statuses[3].setService("authserver.mojang.com");
+        statuses[4].setService("sessionserver.mojang.com");
+        statuses[5].setService("api.mojang.com");
+        statuses[6].setService("textures.minecraft.net");
+        statuses[7].setService("mojang.com");
+
+        return statuses;
+    }
+
+    public static void printServiceStatus() {
+        System.out.println("  " + TextFormat.addRightPadding("",'=',55));
+        System.out.println("  | " + TextFormat.addRightPadding("SERVICE:", ' ', 26) + TextFormat.addRightPadding("STATUS:", ' ',26) + "|");
+
         try {
-            HttpURLConnection connection = (HttpURLConnection) new URL(String.format("https://api.mojang.com/user/profiles/%s/names", validID)).openConnection();
-            connection.setRequestMethod("GET");
-
-            JsonArray array = (JsonArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
-
-            for (int i = 0; i < array.size(); i++) {
-                JsonObject response = (JsonObject) array.get(i);
-
-                String username = response.getAsJsonObject("name").toString();
-                long changeToAt = (Long.valueOf(response.getAsJsonObject("changedToAt").toString()) == null ? 0L : Long.valueOf(response.getAsJsonObject("changedToAt").toString()));
-
-                if (username == null) {
-                    continue;
-                }
-
-                String cause = response.getAsJsonObject("cause").toString();
-                String errorMessage = response.getAsJsonObject("errorMessage").toString();
-
-                if (cause != null && cause.length() > 0) {
-                    throw new IllegalStateException(errorMessage);
-                }
-
-                nameHistory.add(new TimeStampName(username, changeToAt));
+            for (Status status : MojangAPI.getServiceStatus()) {
+                System.out.println("  |" + status.toString().replace("Status:", "").replace("Service:","") + "|  ");
             }
-
-            usernameHistory.put(uuid, nameHistory);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
+        System.out.println("  " + TextFormat.addRightPadding("",'=',55));
+    }
 
-        if (usernameHistory.isEmpty()) {
-            throw new MojangAPIException("Couldn't retrieve any username history for user");
-        }
 
-        return usernameHistory;
+
+    private static String getRawJsonResponse(URL u) throws IOException {
+        HttpURLConnection con = (HttpURLConnection) u.openConnection();
+        con.setDoInput(true);
+        con.setConnectTimeout(2000);
+        con.setReadTimeout(2000);
+        con.connect();
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String response = in.readLine();
+        in.close();
+        return response;
     }
 
 }
