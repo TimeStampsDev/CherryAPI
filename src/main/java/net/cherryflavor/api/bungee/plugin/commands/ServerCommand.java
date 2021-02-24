@@ -1,6 +1,5 @@
 package net.cherryflavor.api.bungee.plugin.commands;
 
-import net.cherryflavor.api.bungee.ProxyAPI;
 import net.cherryflavor.api.bungee.command.BungeeCherryCommand;
 import net.cherryflavor.api.bungee.player.BungeePlayer;
 
@@ -25,6 +24,7 @@ public class ServerCommand extends BungeeCherryCommand {
         super(false, "server", new String[]{"goto"});
         addTab(1, getAPI().getStringListServers());
 
+        addConsoleTab(1, getAPI().getStringListOfOnlinePlayers());
         addConsoleTab(2, getAPI().getStringListServers());
     }
 
@@ -56,8 +56,8 @@ public class ServerCommand extends BungeeCherryCommand {
     public void playerExecute(BungeePlayer player, String[] args) {
         int serverSize = getAPI().getStringListServers().size();
         if (args.length == 0) {
-            player.sendColorMessage("&cUsage: /server <server>");
-            player.sendColorMessage(
+            player.sendColorfulMessage("&cUsage: /server <server>");
+            player.sendColorfulMessage(
                     "&cThere are currently : &f" + serverSize + " server" + TextFormat.pluralization(serverSize) + " &e⬛-Online &c⬛-Offline",
                     "&f" + TextFormat.stripOutliers(getColorCodedServerList().toString())
             );
@@ -66,24 +66,24 @@ public class ServerCommand extends BungeeCherryCommand {
                 ServerInfo info = getAPI().getPlugin().getProxy().getServerInfo(args[0].toLowerCase());
                 if (getAPI().isServerOnline(info)) {
                     if (player.hasPermission(getAPI().getServerPermissionsMap().get(info))) {
-                        player.sendColorMessage(noPermission);
+                        player.sendColorfulMessage(noPermission);
                     } else {
                         if (player.getCurrentServerInfo().getName().equalsIgnoreCase(info.getName())) {
-                            player.sendColorMessage(String.format(getAPI().getBasicMessages().getString("already-connected"), info.getName()));
+                            player.sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("already-connected"), info.getName()));
                         } else {
                             player.sendTo(info);
-                            player.sendColorMessage(String.format(getAPI().getBasicMessages().getString("sent-to-server"), info.getName()));
+                            player.sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("sent-to-server"), info.getName()));
                         }
                     }
                 } else {
-                    player.sendColorMessage(String.format(getAPI().getBasicMessages().getString("server-not-online"), info.getName()));
+                    player.sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("server-not-online"), info.getName()));
                 }
             } else {
-                player.sendColorMessage(String.format(getAPI().getBasicMessages().getString("server-not-exists"),args[0].toLowerCase()));
+                player.sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("server-not-exists"),args[0].toLowerCase()));
             }
         } else {
-            player.sendColorMessage("&cUsage: /server <server>");
-            player.sendColorMessage(
+            player.sendColorfulMessage("&cUsage: /server <server>");
+            player.sendColorfulMessage(
                     "&cThere are currently : &f" + serverSize + " server" + TextFormat.pluralization(serverSize) + " &e⬛-Online &c⬛-Offline",
                     "&f" + TextFormat.stripOutliers(getColorCodedServerList().toString())
             );

@@ -8,3 +8,15 @@ sent-to-server: "&eYou have been sent to &f%s&e."
 ## %s previews server
 server-not-online: "&cServer %s is not online."
 ## %s previews server
+
+player-not-online: "&cPlayer is not online."
+
+player-found-message: "&e%s &7was found on &e%s&7."
+## the first %s playername
+## the second %s previews server that player is on
+
+playerlist-count: "&7There are currently &e%s &7on the network."
+## %s player count network size
+playerlist-preview: "&7[&e%s&7] &f%s"
+## the first %s servername
+## the second %s previews players on that specific server

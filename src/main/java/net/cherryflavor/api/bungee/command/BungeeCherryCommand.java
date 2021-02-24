@@ -136,7 +136,7 @@ public abstract class BungeeCherryCommand extends Command implements TabExecutor
                     if (bungeePlayer.hasPermission(this.permission)) {
                         playerExecute(bungeePlayer, args);
                     } else {
-                        bungeePlayer.sendColorMessage(noPermission);
+                        bungeePlayer.sendColorfulMessage(noPermission);
                     }
                 }
             } else {
@@ -243,7 +243,7 @@ public abstract class BungeeCherryCommand extends Command implements TabExecutor
     //==================================================================================================================
 
     /**
-     * Adds list to return for argument
+     * Adds list to return for argument for player
      * @param argument
      * @param tabList
      */
@@ -253,7 +253,7 @@ public abstract class BungeeCherryCommand extends Command implements TabExecutor
     }
 
     /**
-     * Removes list to return for argument
+     * Removes list to return for argument for player
      * @param argument
      * @param tabList
      */
@@ -263,7 +263,7 @@ public abstract class BungeeCherryCommand extends Command implements TabExecutor
     }
 
     /**
-     * Adds list to return for argument
+     * Adds list to return for argument for console
      * @param argument
      * @param tabList
      */
@@ -273,12 +273,34 @@ public abstract class BungeeCherryCommand extends Command implements TabExecutor
     }
 
     /**
-     * Removes list to return for argument
+     * Removes list to return for argument for console
      * @param argument
      * @param tabList
      */
     public void removeConsoleTab(int argument, List<String> tabList) {
         TabCommand tabCommand = new TabCommand(argument, tabList);
+        consoleTabCommandList.remove(tabCommand);
+    }
+
+    /**
+     * Adds list to return for argument for both players and console
+     * @param argument
+     * @param tabList
+     */
+    public void addTabToBoth(int argument, List<String> tabList) {
+        TabCommand tabCommand = new TabCommand(argument, tabList);
+        tabCommandList.add(tabCommand);
+        consoleTabCommandList.add(tabCommand);
+    }
+
+    /**
+     * Removes list to return for argument for both players and console
+     * @param argument
+     * @param tabList
+     */
+    public void removeTabToBoth(int argument, List<String> tabList) {
+        TabCommand tabCommand = new TabCommand(argument, tabList);
+        tabCommandList.remove(tabCommand);
         consoleTabCommandList.remove(tabCommand);
     }
 

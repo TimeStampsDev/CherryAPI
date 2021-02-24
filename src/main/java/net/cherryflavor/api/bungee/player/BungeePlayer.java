@@ -121,7 +121,7 @@ public class BungeePlayer extends User {
      * Send player colored message
      * @param message
      */
-    public void sendColorMessage(String... message) {
+    public void sendColorfulMessage(String... message) {
         for (String m : message) {
             player.sendMessage(TextFormat.colorize(m));
         }

@@ -4,6 +4,8 @@ import net.cherryflavor.api.bungee.command.BungeeCherryCommand;
 import net.cherryflavor.api.bungee.command.BungeeCommandManager;
 import net.cherryflavor.api.bungee.event.BungeeListenerManager;
 import net.cherryflavor.api.bungee.player.BungeePlayer;
+import net.cherryflavor.api.bungee.plugin.commands.FindCommand;
+import net.cherryflavor.api.bungee.plugin.commands.PlayerListCommand;
 import net.cherryflavor.api.bungee.plugin.commands.ServerCommand;
 import net.cherryflavor.api.configuration.CherryConfig;
 import net.cherryflavor.api.configuration.Configuration;
@@ -40,7 +42,6 @@ public class ProxyAPI {
     //==================================================================================================================
 
     /**
-     *
      * @param plugin
      */
     public ProxyAPI(Plugin plugin) {
@@ -64,7 +65,11 @@ public class ProxyAPI {
 
         checkAllServers();
 
-        registerCommand(new ServerCommand());
+        registerCommand(
+                new ServerCommand(),
+                new PlayerListCommand(),
+                new FindCommand()
+        );
     }
 
     //==================================================================================================================
@@ -121,6 +126,18 @@ public class ProxyAPI {
     }
 
     /**
+     * Returns a StringList of online players
+     * @return
+     */
+    public List<String> getStringListOfOnlinePlayers() {
+        List<String> stringListOnlinePlayers = new ArrayList<>();
+        for (ProxiedPlayer player : getOnlinePlayers()) {
+            stringListOnlinePlayers.add(player.getName());
+        }
+        return stringListOnlinePlayers;
+    }
+
+     /**
      * Method #1
      * Returns player with uuid
      * @param uuid
