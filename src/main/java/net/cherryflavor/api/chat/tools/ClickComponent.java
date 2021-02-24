@@ -1,15 +1,48 @@
-package net.cherryflavor.api.bungee.chat;
+package net.cherryflavor.api.chat.tools;
 
-import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public class ClickComponent {
 
     public String clickText;
     public ClickEvent.Action action;
 
+    //==================================================================================================================
+    // CONSTRUCTORS
+    //==================================================================================================================
+
+    /**
+     *
+     * @param clickText
+     */
     public ClickComponent(String clickText) {
         this.clickText = clickText;
     }
+
+    //==================================================================================================================
+    // METHODS
+    //==================================================================================================================
+
+    /**
+     * Creates a ClickEvent
+     * @param action
+     * @param input
+     * @return
+     */
+    public static ClickEvent addClickEvent(ClickEvent.Action action, String input) {
+        return new ClickEvent(action, input);
+    }
+
+    //==================================================================================================================
+    // GETTERS
+    //==================================================================================================================
 
     /**
      * When text is clicked, opens url

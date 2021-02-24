@@ -8,6 +8,10 @@ import java.io.Writer;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public abstract class ConfigurationProvider {
 
     private static final Map<Class<? extends ConfigurationProvider>, ConfigurationProvider> providers = new HashMap();

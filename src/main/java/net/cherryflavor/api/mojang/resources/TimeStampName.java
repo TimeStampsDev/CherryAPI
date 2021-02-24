@@ -6,6 +6,10 @@ import net.cherryflavor.api.tools.TextFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public class TimeStampName {
 
     @SerializedName("name")
@@ -14,10 +18,18 @@ public class TimeStampName {
     @SerializedName("changedToAt")
     private long changeToAt;
 
+    //==================================================================================================================
+    // CONSTRUCTORS
+    //==================================================================================================================
+
     public TimeStampName(String username, long changeToAt) {
         this.username = username;
         this.changeToAt = changeToAt;
     }
+
+    //==================================================================================================================
+    // GETTERS
+    //==================================================================================================================
 
     public String getUsername() {
         return username;

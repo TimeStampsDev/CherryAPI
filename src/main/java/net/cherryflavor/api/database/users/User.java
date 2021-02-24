@@ -3,24 +3,56 @@ package net.cherryflavor.api.database.users;
 import net.cherryflavor.api.exceptions.MojangAPIException;
 import net.cherryflavor.api.mojang.MojangAPI;
 import net.cherryflavor.api.mojang.resources.TimeStampName;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import org.bukkit.entity.Player;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.UUID;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public class User {
 
     private UUID uuid;
     private String username;
+    private TimeStampName[] nameHistory;
 
+    //==================================================================================================================
+    // CONSTRUCTORS
+    //==================================================================================================================
+
+    /**
+     * @param uuid
+     */
     public User(UUID uuid) {
         this.uuid = uuid;
-        try {
-            this.username = MojangAPI.getCurrentName(uuid);
-        } catch (MojangAPIException e) {
-            e.printStackTrace();
-        }
+        this.username = callUsername(this.uuid);
+        this.nameHistory = callNameHistory(this.uuid);
     }
+
+    /**
+     * @param bukkitPlayer
+     */
+    public User(Player bukkitPlayer) {
+        this.uuid = bukkitPlayer.getUniqueId();
+        this.username = bukkitPlayer.getName();
+        this.nameHistory = callNameHistory(this.uuid);
+    }
+
+    /**
+     * @param proxiedPlayer
+     */
+    public User(ProxiedPlayer proxiedPlayer) {
+        this.uuid = proxiedPlayer.getUniqueId();
+        this.username = proxiedPlayer.getName();
+        this.nameHistory = callNameHistory(this.uuid);
+    }
+
+    //==================================================================================================================
+    // GETTERS
+    //==================================================================================================================
 
     /**
      * @return UUID
@@ -42,12 +74,39 @@ public class User {
      * @return name history retrieved by @MojangAPI
      */
     public TimeStampName[] getNameHistory() {
+        return nameHistory;
+    }
+
+    /**
+     * Calls from api.mojang.com and gets player name history
+     * @param uuid
+     * @return
+     */
+    private TimeStampName[] callNameHistory(UUID uuid) {
+        TimeStampName[] nameHistory = null;
         try {
-            return MojangAPI.getUsernameHistory(this.uuid);
-        } catch (IOException | MojangAPIException e) {
+            nameHistory = MojangAPI.getUsernameHistory(this.uuid);
+        } catch (MojangAPIException e) {
+            e.printStackTrace();
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+        return nameHistory;
+    }
+
+    /**
+     * Calls from api.mojang.com and gets username
+     * @param uuid
+     * @return
+     */
+    private String callUsername(UUID uuid) {
+        String username = null;
+        try {
+            username = MojangAPI.getCurrentName(uuid);
+        } catch (MojangAPIException e) {
             e.printStackTrace();
         }
-        return null;
+        return username;
     }
 
 }

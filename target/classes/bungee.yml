@@ -3,3 +3,5 @@ main: net.cherryflavor.api.bungee.BungeeCherry
 version: 0.1
 description: API plugin used by other plugins.
 author: TimeStampsDev
+commands:
+  sendto:

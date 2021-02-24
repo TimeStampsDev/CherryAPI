@@ -19,6 +19,10 @@ import java.lang.reflect.Type;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public class JsonConfiguration extends ConfigurationProvider {
 
     private final Gson json = (new GsonBuilder()).serializeNulls().setPrettyPrinting().registerTypeAdapter(Configuration.class, new JsonSerializer<Configuration>() {

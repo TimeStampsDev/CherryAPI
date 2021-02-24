@@ -14,10 +14,18 @@ import java.net.HttpURLConnection;
 import java.net.URL;;
 import java.util.*;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public class MojangAPI {
 
     private static JsonParser jsonParser = new JsonParser();
     private static Gson gsonParser = new Gson();
+
+    //==================================================================================================================
+    // GETTERS
+    //==================================================================================================================
 
     /**
      * @param uuid
@@ -48,9 +56,6 @@ public class MojangAPI {
      */
     public static TimeStampName[] getUsernameHistory(UUID uuid) throws MojangAPIException, IOException {
         String validID = uuid.toString().replace("-","");
-        List<TimeStampName> nameHistory = new ArrayList<>();
-
-        Map<UUID, List<TimeStampName>> usernameHistory = new HashMap<>();
 
         String response = getRawJsonResponse(new URL("https://api.mojang.com/user/profiles/" + validID + "/names"));
 
@@ -58,6 +63,10 @@ public class MojangAPI {
         return names;
     }
 
+    /**
+     * @return mojang service status list
+     * @throws IOException
+     */
     public static Status[] getServiceStatus() throws IOException {
         String url = "https://status.mojang.com/check";
         String response = getRawJsonResponse(new URL(url));
@@ -76,6 +85,25 @@ public class MojangAPI {
         return statuses;
     }
 
+    private static String getRawJsonResponse(URL u) throws IOException {
+        HttpURLConnection con = (HttpURLConnection) u.openConnection();
+        con.setDoInput(true);
+        con.setConnectTimeout(2000);
+        con.setReadTimeout(2000);
+        con.connect();
+        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+        String response = in.readLine();
+        in.close();
+        return response;
+    }
+
+    //==================================================================================================================
+    // METHODS
+    //==================================================================================================================
+
+    /**
+     * Prints out mojang service
+     */
     public static void printServiceStatus() {
         System.out.println("  " + TextFormat.addRightPadding("",'=',55));
         System.out.println("  | " + TextFormat.addRightPadding("SERVICE:", ' ', 26) + TextFormat.addRightPadding("STATUS:", ' ',26) + "|");
@@ -88,20 +116,6 @@ public class MojangAPI {
             ioException.printStackTrace();
         }
         System.out.println("  " + TextFormat.addRightPadding("",'=',55));
-    }
-
-
-
-    private static String getRawJsonResponse(URL u) throws IOException {
-        HttpURLConnection con = (HttpURLConnection) u.openConnection();
-        con.setDoInput(true);
-        con.setConnectTimeout(2000);
-        con.setReadTimeout(2000);
-        con.connect();
-        BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-        String response = in.readLine();
-        in.close();
-        return response;
     }
 
 }

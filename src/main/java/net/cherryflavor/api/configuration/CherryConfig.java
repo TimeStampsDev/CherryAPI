@@ -6,10 +6,18 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public class CherryConfig {
 
     private File file;
     private Configuration configuration;
+
+    //==================================================================================================================
+    // CONSTRUCTORS
+    //==================================================================================================================
 
     public CherryConfig(String fileName) throws NullPointerException {
         if (fileExists(fileName)) {
@@ -29,6 +37,10 @@ public class CherryConfig {
         }
     }
 
+    //==================================================================================================================
+    // GETTERS
+    //==================================================================================================================
+
     public static File getDataFolder() {
         return new File("plugins/CherryAPI");
     }
@@ -36,10 +48,13 @@ public class CherryConfig {
     public File getFile() { return this.file; }
     public Configuration getConfig() { return this.configuration; }
 
+    public static final InputStream getResourceAsStream(String resource) {
+        return CherryConfig.class.getClassLoader().getResourceAsStream(resource);
+    }
+
     private static boolean fileExists(String fileName) {
         return new File("plugins/CherryAPI/" + fileName).exists();
     }
-
 
     private Configuration loadConfigOfFile(File file) {
         Configuration config = null;
@@ -51,9 +66,9 @@ public class CherryConfig {
         return config;
     }
 
-    public static final InputStream getResourceAsStream(String resource) {
-        return CherryConfig.class.getClassLoader().getResourceAsStream(resource);
-    }
+    //==================================================================================================================
+    // METHODS
+    //==================================================================================================================
 
     public static void makeFolder(String folderName) {
         new File(folderName).mkdirs();

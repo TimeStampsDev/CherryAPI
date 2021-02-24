@@ -1,1 +1,10 @@
 no-permission: "&cYou don't have permission for this command."
+
+already-connected: "&cYou are already connected to %s."
+## %s previews server
+server-not-exists: "&cServer %s doesn't exists."
+## %s previews server
+sent-to-server: "&eYou have been sent to &f%s&e."
+## %s previews server
+server-not-online: "&cServer %s is not online."
+## %s previews server

@@ -3,21 +3,31 @@ package net.cherryflavor.api.database;
 import net.cherryflavor.api.bungee.ProxyAPI;
 import net.cherryflavor.api.configuration.CherryConfig;
 import net.cherryflavor.api.exceptions.InvalidAPIObjectException;
-import net.cherryflavor.api.spigot.ServerAPI;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public class DatabaseManager {
 
     private List<Database> databaseList;
-    private CherryConfig config;
+    private static CherryConfig config;
 
     private static boolean debug;
 
     public Object api;
 
+    //==================================================================================================================
+    // CONSTRUCTORS
+    //==================================================================================================================
+
+    /**
+     * @param api
+     */
     public DatabaseManager(Object api) {
         this.databaseList = new ArrayList<>();
 
@@ -27,8 +37,16 @@ public class DatabaseManager {
         createConfigFile();
     }
 
+    //==================================================================================================================
+    // GETTERS
+    //==================================================================================================================
+
+    /**
+     * Object must be cast to either ProxyAPI or ServerAPI only!
+     * @return
+     */
     public Object getAPI() {
-        if (api instanceof ServerAPI) {
+        if (api instanceof net.cherryflavor.api.spigot.ServerAPI) {
             return api;
         } else if (api instanceof ProxyAPI) {
             return api;
@@ -42,14 +60,20 @@ public class DatabaseManager {
         return null;
     }
 
-    public static void initFilesFor(Database database) {
-        CherryConfig.createFile(database.getCherryConfig().getFile());
-    }
+    //==================================================================================================================
+    // METHODS
+    //==================================================================================================================
 
+    /**
+     * Creates 'databases' folder
+     */
     public static void createFolder() {
         CherryConfig.makeFolder("plugins/CherryAPI/databases");
     }
 
+    /**
+     * creates 'databases-config.yml'
+     */
     public void createConfigFile() {
         CherryConfig.createResource("databases-config.yml", new File(CherryConfig.getDataFolder(), "/databases/databases-config.yml"));
 
@@ -58,8 +82,13 @@ public class DatabaseManager {
         debug = config.getConfig().getBoolean("debug");
     }
 
+    /**
+     * if debug = true in databases-config.yml
+     * debug messages will appear
+     * @param debugMessage
+     */
     public static void debug(String debugMessage) {
-        if (debug == true) {
+        if (config.getConfig().getBoolean("debug")) {
             System.out.println("[DatabaseManager] " + debugMessage);
         }
     }

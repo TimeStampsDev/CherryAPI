@@ -1,4 +1,4 @@
-package net.cherryflavor.api.tools.chat;
+package net.cherryflavor.api.chat.tools;
 
 import com.google.common.base.Preconditions;
 
@@ -9,6 +9,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ *
+ * yoinked from md_5
+ */
 public class ChatColor {
 
     public static final char COLOR_CHAR = '§';

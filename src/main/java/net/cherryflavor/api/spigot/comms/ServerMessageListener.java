@@ -8,13 +8,25 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public class ServerMessageListener implements PluginMessageListener {
 
     public ServerAPI api;
 
+    //==================================================================================================================
+    // CONSTRUCTORS
+    //==================================================================================================================
+
     public ServerMessageListener(ServerAPI api) {
         this.api = api;
     }
+
+    //==================================================================================================================
+    // METHODS
+    //==================================================================================================================
 
     @Override
     public void onPluginMessageReceived(String channel, Player player, byte[] message) {

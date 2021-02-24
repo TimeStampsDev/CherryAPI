@@ -1,6 +1,10 @@
 package net.cherryflavor.api.mojang;
 
 /**
+ *
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ *
  * ACHIEVEMENTS PULLED FROM :
  * <a href="https://minecraft.gamepedia.com/Achievement">https://minecraft.gamepedia.com/Achievement</a>
  * Last Updated Enum : 2/17/2021
@@ -124,6 +128,10 @@ public enum GameAchievements {
     String achievementLabel;
     String description;
 
+    //==================================================================================================================
+    // CONSTRUCTORS
+    //==================================================================================================================
+
     /**
      * @param achievementLabel
      * @param description
@@ -133,7 +141,16 @@ public enum GameAchievements {
         this.description = description;
     }
 
+    /**
+     * Returns in formal text
+     * @return
+     */
     public String getAchievementLabel() { return achievementLabel; }
+
+    /**
+     * Yoinked from website above
+     * @return
+     */
     public String getDescription() { return description; }
 
 

@@ -1,10 +1,16 @@
 package net.cherryflavor.api.database;
 
 import net.cherryflavor.api.configuration.CherryConfig;
+import net.cherryflavor.api.tools.TextFormat;
+import org.w3c.dom.Text;
 
 import java.sql.*;
 import java.util.Properties;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public class Database {
 
     private String name, host, port, database, username, password;
@@ -12,6 +18,18 @@ public class Database {
 
     private CherryConfig cherryConfig;
 
+    //==================================================================================================================
+    // CONSTRUCTORS
+    //==================================================================================================================
+
+    /**
+     * @param name
+     * @param host
+     * @param port
+     * @param database
+     * @param username
+     * @param password
+     */
     public Database(String name, String host, String port, String database, String username, String password) {
         this.name = name;
         this.host = host;
@@ -24,12 +42,34 @@ public class Database {
         this.cherryConfig = new CherryConfig(name.toLowerCase() + ".yml");
     }
 
+    //==================================================================================================================
+    // GETTERS
+    //==================================================================================================================
+
     /**
      * @return config for database
      */
     public CherryConfig getCherryConfig() {
         return this.cherryConfig;
     }
+
+    /**
+     * @param query
+     * @return ResultSet
+     */
+    public ResultSet getResultSet(String query) {
+        try {
+            PreparedStatement preparedStatement = connection.prepareStatement(query);
+            return preparedStatement.getResultSet();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    //==================================================================================================================
+    // METHODS
+    //==================================================================================================================
 
     /**
      * Opens connection for database
@@ -76,20 +116,6 @@ public class Database {
     }
 
     /**
-     * @param query
-     * @return ResultSet
-     */
-    public ResultSet getResultSet(String query) {
-        try {
-            PreparedStatement preparedStatement = connection.prepareStatement(query);
-            return preparedStatement.getResultSet();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    /**
      * This method executes SQL query 'INSERT'
      * <br> 'INSERT INTO database ' + insert
      * @apiNote
@@ -106,9 +132,19 @@ public class Database {
         }
     }
 
+    /**
+     * This method executes SQL query 'INSERT'
+     * <br> 'INSERT INTO database ' + insert
+     * @apiNote
+     * <p>'INSERT INTO database' <u>NOT NEEDED</u>
+     * <br> ';' <u>NOT NEEDED</u></p>
+     * @param insert
+     * @param into
+     * @param values
+     */
     public void INSERT(String insert, String[] into, String[] values) {
         try {
-            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + database + " (" + stripOutliers(into.toString()) + ") VALUES (" + stripOutliers(values.toString()) + ");");
+            PreparedStatement preparedStatement = connection.prepareStatement("INSERT INTO " + database + " (" + TextFormat.stripOutliers(into.toString()) + ") VALUES (" + TextFormat.stripOutliers(values.toString()) + ");");
             preparedStatement.executeQuery();
             commit();
         } catch (SQLException e) {
@@ -125,19 +161,6 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Returns string to
-     * <blockquote><pre>
-     * "hello, world"   to   "ello, worl" </pre></blockquote>
-     * @param string
-     * @return String
-     */
-    private String stripOutliers(String string) {
-        string = string.substring(1);
-        string = string.substring(0, string.length() - 1);
-        return string;
     }
 
 }

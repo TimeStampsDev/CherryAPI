@@ -18,6 +18,10 @@ import org.yaml.snakeyaml.nodes.Node;
 import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
 
+/**
+ * Created on 2/20/2021
+ * Time 12:32 AM
+ */
 public class YamlConfiguration extends ConfigurationProvider {
 
     private final ThreadLocal<Yaml> yaml = new ThreadLocal<Yaml>() {
