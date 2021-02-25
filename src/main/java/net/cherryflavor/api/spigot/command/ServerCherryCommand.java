@@ -1,8 +1,11 @@
 package net.cherryflavor.api.spigot.command;
 
+import net.cherryflavor.api.other.PagePreviewBuilder;
 import net.cherryflavor.api.other.TabCommand;
+import net.cherryflavor.api.other.help.HelpPageMaker;
 import net.cherryflavor.api.spigot.ServerAPI;
 import net.cherryflavor.api.spigot.player.OnlinePlayer;
+import net.cherryflavor.api.tools.TextFormat;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
@@ -25,6 +28,12 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
 
     private boolean isCancelled;
 
+    private ServerAPI serverAPI = ServerAPI.getAPI();
+
+    private HelpPageMaker helpPage;
+
+    private CommandSender sender;
+
     private List<TabCommand> tabCommandList;
     private List<TabCommand> consoleTabCommandList;
 
@@ -43,6 +52,7 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
         this.aliases = new String[] {""};
         tabCommandList = new ArrayList<>();
         consoleTabCommandList = new ArrayList<>();
+        this.helpPage = new HelpPageMaker(getAPI());
     }
 
     /**
@@ -57,6 +67,7 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
         this.aliases = new String[] {""};
         tabCommandList = new ArrayList<>();
         consoleTabCommandList = new ArrayList<>();
+        this.helpPage = new HelpPageMaker(getAPI());
     }
 
     /**
@@ -72,6 +83,7 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
         this.aliases = aliases;
         tabCommandList = new ArrayList<>();
         consoleTabCommandList = new ArrayList<>();
+        this.helpPage = new HelpPageMaker(getAPI());
     }
 
     /**
@@ -86,6 +98,7 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
         this.aliases = aliases;
         tabCommandList = new ArrayList<>();
         consoleTabCommandList = new ArrayList<>();
+        this.helpPage = new HelpPageMaker(getAPI());
     }
 
     //==================================================================================================================
@@ -121,22 +134,116 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
      */
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
+        this.sender = commandSender;
         if (isCancelled == true) {
             commandSender.sendMessage(unknownCommand);
         } else  {
             if (commandSender instanceof Player) {
                 OnlinePlayer player = new OnlinePlayer(((Player) commandSender).getUniqueId());
                 if (this.permission.isEmpty()) {
-                    return playerExecute(player, command, label, args);
+                    if (args.length == 0) {
+                        return playerExecute(player, command, label, args);
+                    } else if (args.length == 1) {
+                        if (args[0].equalsIgnoreCase("help")) {
+                            if (getHelpPage().getData().isEmpty()) {
+                                sendColorfulMessage(getAPI().getBasicMessages().getString("help.no-help"));
+                            } else {
+                                sendColorfulMessage(getHelpPage().getPagePreview(0));
+                            }
+                        } else {
+                            return playerExecute(player, command, label, args);
+                        }
+                    } else if (args.length == 2) {
+                        if (args[0].equalsIgnoreCase("help")) {
+                            try {
+                                Integer page = Integer.parseInt(args[1])-1;
+
+                                if (page > getHelpPage().getNumberOfPages()) {
+                                    sendColorfulMessage(getAPI().getBasicMessages().getString("cannot-exceed-number-of-pages"));
+                                } else {
+                                    sendColorfulMessage(getHelpPage().getPagePreview(page));
+                                }
+
+                            } catch (NumberFormatException ex) {
+                                sendColorfulMessage(getAPI().getBasicMessages().getString("invalid-number-message"));
+                            }
+                        } else {
+                            return playerExecute(player, command, label, args);
+                        }
+                    } else {
+                        return playerExecute(player, command, label, args);
+                    }
                 } else {
                     if (player.hasPermission(this.permission)) {
-                        return playerExecute(player, command, label, args);
+                        if (args.length == 0) {
+                            return playerExecute(player, command, label, args);
+                        } else if (args.length == 1) {
+                            if (args[0].equalsIgnoreCase("help")) {
+                                if (getHelpPage().getData().isEmpty()) {
+                                    sendColorfulMessage(getAPI().getBasicMessages().getString("help.no-help"));
+                                } else {
+                                    sendColorfulMessage(getHelpPage().getPagePreview(0));
+                                }
+                            } else {
+                                return playerExecute(player, command, label, args);
+                            }
+                        } else if (args.length == 2) {
+                            if (args[0].equalsIgnoreCase("help")) {
+                                try {
+                                    Integer page = Integer.parseInt(args[1])-1;
+
+                                    if (page > getHelpPage().getNumberOfPages()) {
+                                        sendColorfulMessage(getAPI().getBasicMessages().getString("cannot-exceed-number-of-pages"));
+                                    } else {
+                                        sendColorfulMessage(getHelpPage().getPagePreview(page));
+                                    }
+
+                                } catch (NumberFormatException ex) {
+                                    sendColorfulMessage(getAPI().getBasicMessages().getString("invalid-number-message"));
+                                }
+                            } else {
+                                return playerExecute(player, command, label, args);
+                            }
+                        } else {
+                            return playerExecute(player, command, label, args);
+                        }
                     } else {
-                        player.sendColorMessage(noPermission);
+                        player.sendColorfulMessage(noPermission);
                     }
                 }
             } else {
-                return consoleExecute(commandSender, command, label, args);
+                if (args.length == 0) {
+                    return consoleExecute(commandSender, command, label, args);
+                } else if (args.length == 1) {
+                    if (args[0].equalsIgnoreCase("help")) {
+                        if (getHelpPage().getData().isEmpty()) {
+                            sendColorfulMessage(getAPI().getBasicMessages().getString("help.no-help"));
+                        } else {
+                            sendColorfulMessage(getHelpPage().getPagePreview(0));
+                        }
+                    } else {
+                        return consoleExecute(commandSender, command, label, args);
+                    }
+                } else if (args.length == 2) {
+                    if (args[0].equalsIgnoreCase("help")) {
+                        try {
+                            Integer page = Integer.parseInt(args[1])-1;
+
+                            if (page > getHelpPage().getNumberOfPages()) {
+                                sendColorfulMessage(getAPI().getBasicMessages().getString("cannot-exceed-number-of-pages"));
+                            } else {
+                                sendColorfulMessage(getHelpPage().getPagePreview(page));
+                            }
+
+                        } catch (NumberFormatException ex) {
+                            sendColorfulMessage(getAPI().getBasicMessages().getString("invalid-number-message"));
+                        }
+                    } else {
+                        return consoleExecute(commandSender, command, label, args);
+                    }
+                } else {
+                    return consoleExecute(commandSender, command, label, args);
+                }
             }
         }
         return true;
@@ -151,9 +258,31 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
      * @return
      */
     public List<String> onTabComplete(CommandSender commandSender, Command command, String label, String[] args) {
-        for (TabCommand tabCommand : tabCommandList) {
-            if (args.length == tabCommand.getArgument()) {
-                return tabCommand.getTabList();
+        if (commandSender instanceof Player) {
+            for (TabCommand tabCommand : tabCommandList) {
+                if (args.length == tabCommand.getArgument()) {
+                    if (!tabCommand.getWhenArgumentIs().isEmpty()) {
+                        int arg = tabCommand.getArgument()-1;
+                        if (args[arg].equalsIgnoreCase(tabCommand.getWhenArgumentIs())) {
+                            return tabCommand.getTabList();
+                        }
+                    } else {
+                        return tabCommand.getTabList();
+                    }
+                }
+            }
+        } else {
+            for (TabCommand tabCommand : consoleTabCommandList) {
+                if (args.length == tabCommand.getArgument()) {
+                    if (!tabCommand.getWhenArgumentIs().isEmpty()) {
+                        int arg = tabCommand.getArgument()-1;
+                        if (args[arg].equalsIgnoreCase(tabCommand.getWhenArgumentIs())) {
+                            return tabCommand.getTabList();
+                        }
+                    } else {
+                        return tabCommand.getTabList();
+                    }
+                }
             }
         }
         return Collections.emptyList();
@@ -162,6 +291,12 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
     //==================================================================================================================
     // GETTERS
     //==================================================================================================================
+
+    /**
+     * Returns API
+     * @return
+     */
+    public ServerAPI getAPI() { return serverAPI; }
 
     /**
      * Get command
@@ -209,6 +344,12 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
      */
     public boolean isCancelled() { return isCancelled; }
 
+    /**
+     * Help Page
+     * @return
+     */
+    public HelpPageMaker getHelpPage() { return this.helpPage; }
+
     //==================================================================================================================
     // SETTERS
     //==================================================================================================================
@@ -226,8 +367,8 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
      * @param argument
      * @param tabList
      */
-    public void addTab(int argument, List<String> tabList) {
-        TabCommand tabCommand = new TabCommand(argument, tabList);
+    public void addTab(int argument, String whenArgumentIs, List<String> tabList) {
+        TabCommand tabCommand = new TabCommand(argument, whenArgumentIs, tabList);
         tabCommandList.add(tabCommand);
     }
 
@@ -236,8 +377,8 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
      * @param argument
      * @param tabList
      */
-    public void removeTab(int argument, List<String> tabList) {
-        TabCommand tabCommand = new TabCommand(argument, tabList);
+    public void removeTab(int argument, String whenArgumentIs, List<String> tabList) {
+        TabCommand tabCommand = new TabCommand(argument, whenArgumentIs, tabList);
         tabCommandList.remove(tabCommand);
     }
 
@@ -246,8 +387,8 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
      * @param argument
      * @param tabList
      */
-    public void addConsoleTab(int argument, List<String> tabList) {
-        TabCommand tabCommand = new TabCommand(argument, tabList);
+    public void addConsoleTab(int argument, String whenArgumentIs, List<String> tabList) {
+        TabCommand tabCommand = new TabCommand(argument, whenArgumentIs, tabList);
         consoleTabCommandList.add(tabCommand);
     }
 
@@ -256,9 +397,65 @@ public abstract class ServerCherryCommand implements CommandExecutor, TabComplet
      * @param argument
      * @param tabList
      */
-    public void removeConsoleTab(int argument, List<String> tabList) {
-        TabCommand tabCommand = new TabCommand(argument, tabList);
+    public void removeConsoleTab(int argument, String whenArgumentIs, List<String> tabList) {
+        TabCommand tabCommand = new TabCommand(argument, whenArgumentIs, tabList);
         consoleTabCommandList.remove(tabCommand);
+    }
+
+    /**
+     * Adds list to return for argument for both players and console
+     * @param argument
+     * @param tabList
+     */
+    public void addTabToBoth(int argument, String whenArgumentIs, List<String> tabList) {
+        TabCommand tabCommand = new TabCommand(argument, whenArgumentIs, tabList);
+        tabCommandList.add(tabCommand);
+        consoleTabCommandList.add(tabCommand);
+    }
+
+    /**
+     * Removes list to return for argument for both players and console
+     * @param argument
+     * @param tabList
+     */
+    public void removeTabToBoth(int argument, String whenArgumentIs, List<String> tabList) {
+        TabCommand tabCommand = new TabCommand(argument, whenArgumentIs, tabList);
+        tabCommandList.remove(tabCommand);
+        consoleTabCommandList.remove(tabCommand);
+    }
+
+    /**
+     * Sends commandSender a message
+     * @param message
+     */
+    public void sendMessage(String message) {
+        sender.sendMessage(message);
+    }
+
+    /**
+     * Sends commandSender a message
+     * @param message
+     */
+    public void sendColorfulMessage(String... message) {
+        for (String m : message) {
+            sender.sendMessage(TextFormat.colorize(m));
+        }
+    }
+
+    /**
+     * Sends commandSender a message
+     * @param message
+     */
+    public void sendColorfulMessage(List<String> message) {
+        for (String m : message) {
+            sender.sendMessage(TextFormat.colorize(m));
+        }
+    }
+
+    public String correctCommas(String string) {
+        String commaColor = getAPI().getBasicMessages().getString("comma-color-code");
+        string.replace(",", commaColor + ",");
+        return string;
     }
 
 }

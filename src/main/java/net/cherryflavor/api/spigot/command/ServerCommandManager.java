@@ -56,7 +56,7 @@ public class ServerCommandManager {
         api.registerCommand(command);
         for (ServerCherryCommand c : command)  {
             commandList.add(c);
-            api.debug("[CommandManager] " + c.getClass().getName() + " has been registered");
+            api.debug("[CommandManager] " + c.getClass().getSimpleName() + " has been registered");
         }
     }
 

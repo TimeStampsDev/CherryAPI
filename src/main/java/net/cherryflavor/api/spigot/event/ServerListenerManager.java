@@ -13,6 +13,8 @@ public class ServerListenerManager {
 
     private List<ServerCherryListener> listenerList;
 
+    private List<String> listenerNameList;
+
     private ServerAPI api;
 
     //==================================================================================================================
@@ -22,16 +24,34 @@ public class ServerListenerManager {
     public ServerListenerManager(ServerAPI api) {
         this.api = api;
         listenerList = new ArrayList<>();
+        listenerNameList = new ArrayList<>();
     }
 
     //==================================================================================================================
     // GETTERS
     //==================================================================================================================
 
+
+    /**
+     *
+     * @return
+     */
+    public ServerAPI getApi() {
+        return api;
+    }
+
+    /**
+     *
+     * @return
+     */
     public List<ServerCherryListener> getListenerList() {
         return listenerList;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ServerCherryListener> getEnabledListeners() {
         List<ServerCherryListener> listeners = new ArrayList<>();
         for (ServerCherryListener listener : listenerList) {
@@ -42,6 +62,10 @@ public class ServerListenerManager {
         return listeners;
     }
 
+    /**
+     *
+     * @return
+     */
     public List<ServerCherryListener> getCancelledListeners() {
         List<ServerCherryListener> listeners = new ArrayList<>();
         for (ServerCherryListener listener : listenerList) {
@@ -58,8 +82,10 @@ public class ServerListenerManager {
 
     public void registerListener(ServerCherryListener... listener) {
         for (ServerCherryListener l : listener) {
-            api.getPlugin().getServer().getPluginManager().registerEvents(l, api.getPlugin());
-            api.debug("[ListenerManager] " + l.getClass().getName() + " has been registered");
+            if (!listenerNameList.contains(l.getListenerName())) {
+                api.getPlugin().getServer().getPluginManager().registerEvents(l, api.getPlugin());
+                api.debug("[ListenerManager] " + l.getListenerName() + " has been registered");
+            }
         }
     }
 

@@ -3,3 +3,6 @@ main: net.cherryflavor.api.spigot.SpigotCherry
 version: 0.1
 description: API plugin used by other plugins.
 author: TimeStampsDev
+commands:
+  worldtp:
+  worldmng:

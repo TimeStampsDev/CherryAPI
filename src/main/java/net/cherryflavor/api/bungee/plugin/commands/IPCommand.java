@@ -17,7 +17,7 @@ public class IPCommand extends BungeeCherryCommand {
     public IPCommand() {
         super(false, "ip", new String[] {"getip","findip"});
 
-        addTabToBoth(1, getAPI().getStringListOfOnlinePlayers());
+        addTabToBoth(1, "", getAPI().getStringListOfOnlinePlayers());
     }
 
     //==================================================================================================================

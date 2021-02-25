@@ -47,6 +47,14 @@ public class BungeePlayer extends User {
     //==================================================================================================================
 
     /**
+     * Retrieves ping
+     * @return
+     */
+    public Integer getPing() {
+        return player.getPing();
+    }
+
+    /**
      * Gets user attribute
      * @return
      */

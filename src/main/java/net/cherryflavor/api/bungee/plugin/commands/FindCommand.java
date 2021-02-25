@@ -18,7 +18,7 @@ public class FindCommand extends BungeeCherryCommand {
     public FindCommand() {
         super(false,"find",new String[] {"locate"});
 
-        addTabToBoth(1, getAPI().getStringListOfOnlinePlayers());
+        addTabToBoth(1, "", getAPI().getStringListOfOnlinePlayers());
     }
 
     //==================================================================================================================

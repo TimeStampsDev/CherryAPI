@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
  * Created on 2/20/2021
  * Time 12:32 AM
  */
-public abstract class ServerCherryListener implements Listener {
+public class ServerCherryListener implements Listener {
 
     private String listenerName;
     private boolean isCancelled;
@@ -33,8 +33,5 @@ public abstract class ServerCherryListener implements Listener {
     public boolean isCancelled() {
         return isCancelled;
     }
-
-    @EventHandler
-    public abstract void event();
 
 }

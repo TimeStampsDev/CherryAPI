@@ -1,8 +1,7 @@
-package net.cherryflavor.api.spigot.world.generation;
+package net.cherryflavor.api.spigot.world.generation.populators;
 
 import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 
@@ -10,21 +9,19 @@ import java.util.Random;
 
 /**
  * Created on 2/21/2021
- * Time 9:51 PM
+ * Time 10:00 PM
  */
 
-public class TreePopulator extends BlockPopulator {
+public class GrassPopulator extends BlockPopulator {
 
-    int treeAmount = 4;
-    TreeType treeType;
+    int grassAmount = 0;
 
     //==================================================================================================================
     // CONSTRUCTORS
     //==================================================================================================================
 
-    public TreePopulator(int treeAmount, TreeType treeType) {
-        this.treeAmount = treeAmount;
-        this.treeType = treeType;
+    public GrassPopulator(int grassAmount) {
+        this.grassAmount = grassAmount;
     }
 
     //==================================================================================================================
@@ -34,15 +31,15 @@ public class TreePopulator extends BlockPopulator {
     @Override
     public void populate(World world, Random random, Chunk chunk) {
         if (random.nextBoolean()) {
-            int amount = random.nextInt(treeAmount) + 1; //amount of trees
+            int amount = random.nextInt(grassAmount) + 1;
 
-            for (int i = 1; i < amount; i++) {
+            for (int i = 0; i < amount; i++) {
                 int X = random.nextInt(15);
                 int Z = random.nextInt(15);
                 int Y;
 
                 for (Y = world.getMaxHeight()-1; chunk.getBlock(X, Y, Z).getType() == Material.AIR; Y--);
-                world.generateTree(chunk.getBlock(X,Y,Z).getLocation(), treeType);
+                chunk.getBlock(X, Y+1, Z).setType(Material.GRASS);
             }
 
         }

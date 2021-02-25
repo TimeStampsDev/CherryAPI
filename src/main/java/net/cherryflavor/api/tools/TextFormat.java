@@ -4,6 +4,9 @@ import net.cherryflavor.api.chat.tools.ChatColor;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.chat.ComponentSerializer;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created on 2/20/2021
  * Time 12:32 AM
@@ -74,6 +77,20 @@ public class TextFormat {
         string = string.substring(1);
         string = string.substring(0, string.length() - 1);
         return string;
+    }
+
+    /**
+     * Convert String Array to List
+     * @return
+     */
+    public static List<String> convertArrayToList(String[] array) {
+        List<String> list = new ArrayList<>();
+
+        for (String s : array) {
+            list.add(s);
+        }
+
+        return list;
     }
 
 }

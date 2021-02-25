@@ -3,13 +3,22 @@ package net.cherryflavor.api.spigot;
 import net.cherryflavor.api.configuration.CherryConfig;
 import net.cherryflavor.api.configuration.Configuration;
 import net.cherryflavor.api.database.DatabaseManager;
+import net.cherryflavor.api.database.users.User;
 import net.cherryflavor.api.spigot.command.ServerCherryCommand;
 import net.cherryflavor.api.spigot.command.ServerCommandManager;
 import net.cherryflavor.api.spigot.comms.ServerMessageListener;
 import net.cherryflavor.api.spigot.event.ServerListenerManager;
 import net.cherryflavor.api.spigot.player.OnlinePlayer;
+import net.cherryflavor.api.spigot.plugin.commands.WorldManageCommand;
+import net.cherryflavor.api.spigot.plugin.commands.WorldTeleportCommand;
+import net.cherryflavor.api.spigot.plugin.events.JoinEvent;
+import net.cherryflavor.api.spigot.world.WorldManager;
+import net.cherryflavor.api.spigot.world.generation.WorldType;
+import net.cherryflavor.api.tools.TextFormat;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.TreeType;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -28,6 +37,7 @@ public class ServerAPI {
     private static DatabaseManager databaseManager;
     private static ServerCommandManager commandManager;
     private static ServerListenerManager listenerManager;
+    private static WorldManager worldManager;
 
     private static Configuration basicMessagesConfig;
     private static Configuration config;
@@ -43,22 +53,38 @@ public class ServerAPI {
         api = this;
 
         CherryConfig.makeFolder("plugins/CherryAPI");
+        CherryConfig.makeFolder("plugins/CherryAPI/worlds");
+
+        CherryConfig.createResource("spigot/basic-messages.yml",new File("plugins/CherryAPI/basic-messages.yml"));
+        CherryConfig.createResource("spigot/config.yml",new File("plugins/CherryAPI/config.yml"));
+        CherryConfig.createResource("spigot/worldmanage.yml",new File("plugins/CherryAPI/worldmanage.yml"));
+
+        basicMessagesConfig = new CherryConfig(new File("plugins/CherryAPI/basic-messages.yml")).getConfig();
+        config = new CherryConfig(new File("plugins/CherryAPI/config.yml")).getConfig();
 
         databaseManager = new DatabaseManager(this);
         commandManager = new ServerCommandManager(this);
         listenerManager = new ServerListenerManager(this);
-
-        CherryConfig.createResource("spigot/basic-messages.yml",new File("plugins/CherryAPI/basic-messages.yml"));
-        CherryConfig.createResource("spigot/config.yml",new File("plugins/CherryAPI/config.yml"));
-
-        basicMessagesConfig = new CherryConfig(new File("plugins/CherryAPI/basic-messages.yml")).getConfig();
-        config = new CherryConfig(new File("plugins/CherryAPI/config.yml")).getConfig();
+        worldManager = new WorldManager(this);
 
         permissionsMap = new HashMap<>();
 
         plugin.getServer().getMessenger().registerOutgoingPluginChannel(plugin, "BungeeCord");
         plugin.getServer().getMessenger().registerIncomingPluginChannel(plugin, "BungeeCord", new ServerMessageListener(this));
 
+        getCommandManager().registerCommand(
+                new WorldTeleportCommand(),
+                new WorldManageCommand()
+        );
+
+        getListenerManager().registerListener(
+                new JoinEvent()
+        );
+
+        worldManager.loadWorlds();
+        worldManager.registerVanillaWorlds();
+
+        updateConnectedPlayers();
     }
 
     //==================================================================================================================
@@ -71,6 +97,7 @@ public class ServerAPI {
     public static DatabaseManager getDatabaseManager() { return databaseManager; }
     public static ServerCommandManager getCommandManager() { return commandManager; }
     public static ServerListenerManager getListenerManager() { return listenerManager; }
+    public static WorldManager getWorldManager() { return worldManager; }
 
     public Configuration getBasicMessages() { return basicMessagesConfig; }
     public Configuration getConfig() { return config; }
@@ -149,6 +176,13 @@ public class ServerAPI {
     // METHODS
     //==================================================================================================================
 
+    private void updateConnectedPlayers() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            User.serverPlayerUsernameMap.put(player.getUniqueId(), player.getName());
+            User.serverPlayerUUIDMap.put(player, player.getUniqueId());
+        }
+    }
+
     /**
      * If debug is set to true in config.yml
      * Debug will send message
@@ -157,7 +191,7 @@ public class ServerAPI {
     public void debug(String... message) {
         if (config.getBoolean("debug") == true) {
             for (String m : message) {
-                plugin.getLogger().info(m);
+                plugin.getLogger().info(TextFormat.colorize("&9" + m));
             }
         }
     }
@@ -169,6 +203,7 @@ public class ServerAPI {
     public void registerCommand(ServerCherryCommand... commands) {
         for (ServerCherryCommand command : commands) {
             plugin.getCommand(command.getCommand()).setExecutor(command);
+            plugin.getCommand(command.getCommand()).setAliases(TextFormat.convertArrayToList(command.getAliases()));
         }
     }
 

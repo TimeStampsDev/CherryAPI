@@ -5,3 +5,8 @@ description: API plugin used by other plugins.
 author: TimeStampsDev
 commands:
   sendto:
+  playerlist:
+  find:
+  ip:
+  handlermng:
+  ping:

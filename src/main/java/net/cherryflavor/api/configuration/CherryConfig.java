@@ -52,7 +52,7 @@ public class CherryConfig {
         return CherryConfig.class.getClassLoader().getResourceAsStream(resource);
     }
 
-    private static boolean fileExists(String fileName) {
+    public static boolean fileExists(String fileName) {
         return new File("plugins/CherryAPI/" + fileName).exists();
     }
 
@@ -87,7 +87,11 @@ public class CherryConfig {
     public static void createFile(String filePath) {
         if (!fileExists(filePath)) {
             try (InputStream in = CherryConfig.class.getResourceAsStream(filePath)) {
-                Files.copy(in, new File(filePath).toPath());
+                if (in == null) {
+                    new File(filePath).createNewFile();
+                } else {
+                    Files.copy(in, new File(filePath).toPath());
+                }
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
@@ -101,6 +105,22 @@ public class CherryConfig {
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }
+        }
+    }
+
+    public void loadFile() {
+        try {
+            ConfigurationProvider.getProvider(YamlConfiguration.class).load(this.file);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+
+    public void saveFile() {
+        try {
+            ConfigurationProvider.getProvider(YamlConfiguration.class).save(this.configuration, this.file);
+        } catch (IOException ioException) {
+            ioException.printStackTrace();
         }
     }
 

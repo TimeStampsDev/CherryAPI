@@ -6,7 +6,8 @@ package net.cherryflavor.api.spigot.world.generation;
  */
 public enum WorldType {
 
-    VOID,
+    END,
+    NETHER,
     FLAT,
     NORMAL;
 

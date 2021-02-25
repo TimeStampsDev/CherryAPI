@@ -1,6 +1,7 @@
-package net.cherryflavor.api.spigot.world.generation;
+package net.cherryflavor.api.spigot.world.generation.chunkgeneration;
 
 import net.cherryflavor.api.spigot.ServerAPI;
+import net.cherryflavor.api.spigot.world.WorldManager;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.TreeType;
@@ -20,11 +21,9 @@ import java.util.Random;
  * Time 9:14 PM
  */
 
-public class CherryChunkGenerator  extends ChunkGenerator {
+public class RegularChunkGenerator extends ChunkGenerator {
 
     ServerAPI serverAPI;
-
-    static int basicChunkLength = 16;
 
     int currentHeight = 0;
     int chunkCount = 0;
@@ -36,7 +35,7 @@ public class CherryChunkGenerator  extends ChunkGenerator {
     // CONSTRUCTORS
     //==================================================================================================================
 
-    public CherryChunkGenerator(ServerAPI serverAPI) {
+    public RegularChunkGenerator(ServerAPI serverAPI) {
         this.serverAPI = serverAPI;
         this.blockPopulatorsList = new ArrayList<>();
     }
@@ -74,13 +73,13 @@ public class CherryChunkGenerator  extends ChunkGenerator {
 
         generator.setScale(0.005D); // Larger the scale, the deeper the terrain.
 
-        double heighVariation = 15; // changing this randomly makes chunk-sized pits (HOLES)
+        double heightVariation = 15; // changing this randomly makes chunk-sized pits (HOLES)
         double lowestLevel = 50;
 
 
-        for (int x = 0; x < basicChunkLength; x++) {
-            for (int z = 0; z < basicChunkLength; z++) {
-                currentHeight = (int) ((generator.noise(chunkX*basicChunkLength+x, chunkZ*basicChunkLength+z, 2.8D, 0.2D, true)+1)*heighVariation+lowestLevel);
+        for (int x = 0; x < WorldManager.basicChunkLength; x++) {
+            for (int z = 0; z < WorldManager.basicChunkLength; z++) {
+                currentHeight = (int) ((generator.noise(chunkX*WorldManager.basicChunkLength +x, chunkZ*WorldManager.basicChunkLength+z, 2.8D, 0.2D, true)+1)*heightVariation+lowestLevel);
                 chunk.setBlock(x, currentHeight, z, Material.GRASS_BLOCK);
                 chunk.setBlock(x, currentHeight-1, z, Material.DIRT);
                 chunk.setBlock(x, currentHeight-2, z, Material.DIRT);

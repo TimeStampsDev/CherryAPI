@@ -22,10 +22,10 @@ public class ServerCommand extends BungeeCherryCommand {
 
     public ServerCommand() {
         super(false, "server", new String[]{"goto"});
-        addTab(1, getAPI().getStringListServers());
+        addTab(1, "", getAPI().getStringListServers());
 
-        addConsoleTab(1, getAPI().getStringListOfOnlinePlayers());
-        addConsoleTab(2, getAPI().getStringListServers());
+        addConsoleTab(1, "", getAPI().getStringListOfOnlinePlayers());
+        addConsoleTab(2, "", getAPI().getStringListServers());
     }
 
     //==================================================================================================================

@@ -7,9 +7,12 @@ import net.cherryflavor.api.tools.TextFormat;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -86,9 +89,24 @@ public class OnlinePlayer extends User {
      */
     public boolean exists() { return (player != null); }
 
+    /**
+     *
+     * @return
+     */
+    public Location getLocation() { return player.getLocation(); }
+
     //==================================================================================================================
     // METHODS
     //==================================================================================================================
+
+    /**
+     * Teleports to world
+     * @param world
+     */
+    public void teleport(World world) {
+        Location spawnLocation = world.getSpawnLocation();
+        player.teleport(new Location(world, spawnLocation.getX(), spawnLocation.getY(), spawnLocation.getZ()));
+    }
 
     /**
      * Gives player permission
@@ -138,7 +156,17 @@ public class OnlinePlayer extends User {
      * Send player colored message
      * @param message
      */
-    public void sendColorMessage(String... message) {
+    public void sendColorfulMessage(String... message) {
+        for (String m : message) {
+            player.sendMessage(TextFormat.colorize(m));
+        }
+    }
+
+    /**
+     * Send player colored message
+     * @param message
+     */
+    public void sendColorfulMessage(List<String> message) {
         for (String m : message) {
             player.sendMessage(TextFormat.colorize(m));
         }

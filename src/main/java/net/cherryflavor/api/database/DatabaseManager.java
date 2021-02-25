@@ -3,6 +3,7 @@ package net.cherryflavor.api.database;
 import net.cherryflavor.api.bungee.ProxyAPI;
 import net.cherryflavor.api.configuration.CherryConfig;
 import net.cherryflavor.api.exceptions.InvalidAPIObjectException;
+import net.cherryflavor.api.spigot.ServerAPI;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class DatabaseManager {
      * @return
      */
     public Object getAPI() {
-        if (api instanceof net.cherryflavor.api.spigot.ServerAPI) {
+        if (api instanceof ServerAPI) {
             return api;
         } else if (api instanceof ProxyAPI) {
             return api;

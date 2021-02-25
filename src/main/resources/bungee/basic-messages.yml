@@ -3,6 +3,23 @@
 no-permission: "&cYou don't have permission for this command."
 invalid-number-message: "&cNumber provided is invalid."
 cannot-exceed-number-of-pages: "&cNumber cannot exceed number of pages."
+comma-color-code: "&7"
+ping:
+  personal: "&eYour ping is currently %s&e."
+  ### %s previews ping
+  other: "&f%s's &eping is %s&e."
+  ### first %s targets name, second %s targets ping
+
+####### PAGE FORMAT MESSAGE ############################################################################################
+############################# HELP #####################################################################################
+### %page% previews current page number
+### %max% previews max number of pages there are
+help:
+  no-help: "&cNo help found for this command."
+  header: "&6====================================\n&6&lHELP\n&7(Page %page% / %max%)"
+  footer: "&6===================================="
+  command-color: "&7"
+  description-color: "&f"
 
 ####### SERVER COMMAND MESSAGES ########################################################################################
 

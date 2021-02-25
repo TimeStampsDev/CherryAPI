@@ -58,11 +58,5 @@ public abstract class BungeeCherryListener implements Listener {
         isCancelled = cancelled;
     }
 
-    //==================================================================================================================
-    // ABSTRACT METHODS
-    //==================================================================================================================
-
-    @EventHandler
-    public abstract void event();
 
 }

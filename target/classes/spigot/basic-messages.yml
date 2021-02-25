@@ -1,1 +1,57 @@
+####### BASIC-PLAYER MESSAGES ##########################################################################################
+
 no-permission: "&cYou don't have permission for this command."
+invalid-number-message: "&cNumber provided is invalid."
+cannot-exceed-number-of-pages: "&cNumber cannot exceed number of pages."
+comma-color-code: "&7"
+
+####### PAGE FORMAT MESSAGE ############################################################################################
+############################# HELP #####################################################################################
+### %page% previews current page number
+### %max% previews max number of pages there are
+help:
+  no-help: "&cNo help found for this command."
+  header: "&6====================================\n_____&e&lHELP &7(Page %page% / %max%)"
+  footer: "&6===================================="
+  command-color: "&7"
+  description-color: "&f"
+
+####### WORLDMANAGE COMMAND MESSAGES ###################################################################################
+
+world-not-exists: "&cWorld %s doesn't exists."
+## %s replaces to world
+## %s replaces to world
+sent-player-to-world: "&cYou sent %s to %s successfully."
+## the first %s playername
+## the second %s previews world player was sent to
+world-info-message-color: "&e"
+teleported-to-world: "&cYou were sent to %s."
+## %s previews world teleported to
+world-playermax-reached: "&cMax amount of players has been reached."
+spawn-location-set: "&cSpawn location has been set for %s."
+## %s replaces to world
+maxplayers-set: "&cMax players has been set to %s for %s."
+## the first %s maxplayer
+## the second %s previews world
+flags-list-message: "&cThere are currently %s &cavailable."
+## %s replaces to flag count
+flag:
+  added: "&cYou have added %s flag to %s."
+  ## first %s replaces to flag name, second %s replaces to world name
+  already-added: "&cFlag already added to %s."
+  ## first %s replaces to world name
+  removed: "&cYou have removed %s flag to %s."
+  ## first %s replaces to flag name, second %s replaces to world name
+  already-removed: "&cFlag already removed to %s."
+  ## first %s replaces to world name
+invalid-flag: "&cFlag provided is invalid or does not exist."
+worlds-list-message: "&cThere are currently %s &cavailable."
+## %s replaces to world count
+
+####### WORLD FLAG MESSAGES ############################################################################################
+
+pvp-disabled: "&cPVP is disabled in this world."
+
+####### OTHER MESSAGES #################################################################################################
+
+player-not-online: "&cPlayer is not online."

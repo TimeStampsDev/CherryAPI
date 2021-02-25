@@ -1,5 +1,6 @@
-package net.cherryflavor.api.spigot.world.generation;
+package net.cherryflavor.api.spigot.world.generation.populators;
 
+import net.cherryflavor.api.spigot.world.WorldManager;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -24,7 +25,7 @@ public class LakePopulator extends BlockPopulator {
     }
 
     //==================================================================================================================
-    // GETTERS
+    // METHODS
     //==================================================================================================================
 
     @Override
@@ -33,8 +34,8 @@ public class LakePopulator extends BlockPopulator {
             int chunkX = chunk.getX();
             int chunkZ = chunk.getZ();
 
-            int randomX = chunkX * CherryChunkGenerator.basicChunkLength + random.nextInt(CherryChunkGenerator.basicChunkLength);
-            int randomZ = chunkZ + CherryChunkGenerator.basicChunkLength + random.nextInt(CherryChunkGenerator.basicChunkLength);
+            int randomX = chunkX * WorldManager.basicChunkLength + random.nextInt(WorldManager.basicChunkLength);
+            int randomZ = chunkZ + WorldManager.basicChunkLength + random.nextInt(WorldManager.basicChunkLength);
             int y = 0;
 
             for (y = world.getMaxHeight() - 1; world.getBlockAt(randomX, y, randomZ).getType() == Material.AIR; y--);

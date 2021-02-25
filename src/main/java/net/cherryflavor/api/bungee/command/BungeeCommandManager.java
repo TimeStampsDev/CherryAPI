@@ -12,6 +12,7 @@ import java.util.List;
 public class BungeeCommandManager {
 
     private List<BungeeCherryCommand> commandList;
+    private List<String> registered;
 
     private ProxyAPI api;
 
@@ -26,6 +27,7 @@ public class BungeeCommandManager {
     public BungeeCommandManager(ProxyAPI api) {
         this.api = api;
         commandList = new ArrayList<>();
+        registered = new ArrayList<>();
     }
 
     //==================================================================================================================
@@ -37,8 +39,14 @@ public class BungeeCommandManager {
      * @return
      */
     public List<BungeeCherryCommand> getCommandList() {
-        return commandList;
+        return this.commandList;
     }
+
+    /**
+     *
+     * @return
+     */
+    public List<String> getRegistered() { return this.registered; }
 
     /**
      * Get commands that cancelled is set to false
@@ -75,7 +83,7 @@ public class BungeeCommandManager {
      */
     public BungeeCherryCommand getCommand(String command) {
         for (BungeeCherryCommand cmd : getCommandList()) {
-            if (cmd.getCommand().toLowerCase().equalsIgnoreCase(command.toLowerCase())) {
+            if (cmd.getCommand().equalsIgnoreCase(command)) {
                 return cmd;
             }
         }
@@ -88,8 +96,8 @@ public class BungeeCommandManager {
      * @return
      */
     public boolean commandExists(String command) {
-        for (BungeeCherryCommand cmd : getCommandList()) {
-            if (cmd.getCommand().toLowerCase().equalsIgnoreCase(command.toLowerCase())) {
+        for (String cmd : registered) {
+            if (cmd.equalsIgnoreCase(command)) {
                 return true;
             } else {
                 return false;
@@ -122,10 +130,11 @@ public class BungeeCommandManager {
      * @param command
      */
     public void registerCommand(BungeeCherryCommand... command) {
-        api.registerCommand(command);
         for (BungeeCherryCommand c : command)  {
             commandList.add(c);
-            api.debug("[CommandManager] " + c.getClass().getName() + " has been registered");
+            registered.add(c.getCommand());
+            api.registerCommand(c);
+            api.debug("[CommandManager] " + c.getClass().getSimpleName() + " has been registered");
         }
     }
 
@@ -134,10 +143,11 @@ public class BungeeCommandManager {
      * @param command
      */
     public void unregisterCommand(BungeeCherryCommand... command) {
-        api.unregisterCommand(command);
         for (BungeeCherryCommand c : command) {
             commandList.remove(c);
-            api.debug("[CommandManager] " + c.getClass().getName() + " has been unregistered");
+            registered.remove(c);
+            api.unregisterCommand(c);
+            api.debug("[CommandManager] " + c.getClass().getSimpleName() + " has been unregistered");
         }
     }
 

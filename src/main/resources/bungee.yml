@@ -9,3 +9,4 @@ commands:
   find:
   ip:
   handlermng:
+  ping:

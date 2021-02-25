@@ -1,4 +1,27 @@
+####### BASIC-PLAYER MESSAGES ##########################################################################################
+
 no-permission: "&cYou don't have permission for this command."
+invalid-number-message: "&cNumber provided is invalid."
+cannot-exceed-number-of-pages: "&cNumber cannot exceed number of pages."
+comma-color-code: "&7"
+ping:
+  personal: "&eYour ping is currently %s&e."
+  ### %s previews ping
+  other: "&f%s's &eping is %s&e."
+  ### first %s targets name, second %s targets ping
+
+####### PAGE FORMAT MESSAGE ############################################################################################
+############################# HELP #####################################################################################
+### %page% previews current page number
+### %max% previews max number of pages there are
+help:
+  no-help: "&cNo help found for this command."
+  header: "&6====================================\n&6&lHELP\n&7(Page %page% / %max%)"
+  footer: "&6===================================="
+  command-color: "&7"
+  description-color: "&f"
+
+####### SERVER COMMAND MESSAGES ########################################################################################
 
 already-connected: "&cYou are already connected to %s."
 ## %s previews server
@@ -8,3 +31,49 @@ sent-to-server: "&eYou have been sent to &f%s&e."
 ## %s previews server
 server-not-online: "&cServer %s is not online."
 ## %s previews server
+current-server-count: "&cThere are currently : &f%s &e⬛-Online &c⬛-Offline"
+## %s previews "# server(s)"
+
+####### HANDLER COMMAND MESSAGES #######################################################################################
+
+command-not-exists: "&cCommand provided doesn't exist."
+current-command-count: "&cThere are currently : &f%s &e⬛-Enabled &c⬛-Disabled"
+## %s previews "# command(s)"
+command-enabled: "&e%s &7command was &eenabled&7."
+## %s previews command
+command-disabled: "&e%s &7command was &cdisabled&7."
+## %s previews command
+command-already-enabled: "&e%s &7command was already &eenabled&7."
+## %s previews command
+command-already-disabled: "&e%s &7command was already &cdisabled&7."
+## %s previews command
+
+event-not-exists: "&cEvent provided doesn't exist."
+current-event-count: "&cThere are currently : &f%s &e⬛-Enabled &c⬛-Disabled"
+## %s previews "# event(s)"
+event-enabled: "&e%s &7event was &eenabled&7."
+## %s previews event
+event-disabled: "&e%s &7event was &cdisabled&7."
+## %s previews event
+event-already-enabled: "&e%s &7event was already &eenabled&7."
+## %s previews event
+event-already-disabled: "&e%s &7event was already &cdisabled&7."
+## %s previews event
+
+####### IP COMMAND MESSAGES ############################################################################################
+
+ip-is-message: "&e%s's &7ip address is: &e%s"
+## the first %s playername
+## the second %s previews players ip address
+
+####### OTHER MESSAGES #################################################################################################
+
+player-not-online: "&cPlayer is not online."
+player-found-message: "&e%s &7was found on &e%s&7."
+## the first %s playername
+## the second %s previews server that player is on
+playerlist-count: "&7There are currently &e%s &7on the network."
+## %s player count network size
+playerlist-preview: "&7[&e%s&7] &f%s"
+## the first %s servername
+## the second %s previews players on that specific server
