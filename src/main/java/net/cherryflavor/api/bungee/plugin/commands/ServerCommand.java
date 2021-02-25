@@ -58,7 +58,7 @@ public class ServerCommand extends BungeeCherryCommand {
         if (args.length == 0) {
             player.sendColorfulMessage("&cUsage: /server <server>");
             player.sendColorfulMessage(
-                    "&cThere are currently : &f" + serverSize + " server" + TextFormat.pluralization(serverSize) + " &e⬛-Online &c⬛-Offline",
+                    String.format(getAPI().getBasicMessages().getString("current-server-count"), serverSize + " server" + TextFormat.pluralization(serverSize)),
                     "&f" + TextFormat.stripOutliers(getColorCodedServerList().toString())
             );
         } else if (args.length == 1) {
@@ -84,7 +84,7 @@ public class ServerCommand extends BungeeCherryCommand {
         } else {
             player.sendColorfulMessage("&cUsage: /server <server>");
             player.sendColorfulMessage(
-                    "&cThere are currently : &f" + serverSize + " server" + TextFormat.pluralization(serverSize) + " &e⬛-Online &c⬛-Offline",
+                    String.format(getAPI().getBasicMessages().getString("current-server-count"), serverSize + " server" + TextFormat.pluralization(serverSize)),
                     "&f" + TextFormat.stripOutliers(getColorCodedServerList().toString())
             );
         }
@@ -92,10 +92,14 @@ public class ServerCommand extends BungeeCherryCommand {
 
     @Override
     public void consoleExecute(CommandSender console, String[] args) {
+        int serverSize = getAPI().getStringListServers().size();
         if (args.length == 0) {
             sendColorfulMessage("&cUsage: /server <user> <server>");
         } else if (args.length == 1) {
             sendColorfulMessage("&cUsage: /server <user> <server>");
+            sendColorfulMessage(
+                    String.format(getAPI().getBasicMessages().getString("current-server-count"), serverSize + " server" + TextFormat.pluralization(serverSize)),
+                    "&f" + TextFormat.stripOutliers(getColorCodedServerList().toString()));
         } else if (args.length == 2) {
             if (getAPI().isOnline(args[0])) {
                 BungeePlayer target = new BungeePlayer(args[0]);

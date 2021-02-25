@@ -28,10 +28,18 @@ public class BungeeListenerManager {
     // GETTERS
     //==================================================================================================================
 
+    /**
+     * Gets a list of all listeners, enabled or disabled
+     * @return
+     */
     public List<BungeeCherryListener> getListenerList() {
         return listenerList;
     }
 
+    /**
+     * Gets all enabled listeners
+     * @return
+     */
     public List<BungeeCherryListener> getEnabledListeners() {
         List<BungeeCherryListener> listeners = new ArrayList<>();
         for (BungeeCherryListener listener : listenerList) {
@@ -42,6 +50,10 @@ public class BungeeListenerManager {
         return listeners;
     }
 
+    /**
+     * Gets all disabled listeners
+     * @return
+     */
     public List<BungeeCherryListener> getCancelledListeners() {
         List<BungeeCherryListener> listeners = new ArrayList<>();
         for (BungeeCherryListener listener : listenerList) {
@@ -50,6 +62,36 @@ public class BungeeListenerManager {
             }
         }
         return listeners;
+    }
+
+    /**
+     * Returns a listener by name
+     * @param listenerPrompt
+     * @return
+     */
+    public BungeeCherryListener getListener(String listenerPrompt) {
+        for (BungeeCherryListener listener : getListenerList()) {
+            if (listener.getListenerName().equalsIgnoreCase(listenerPrompt)) {
+                return listener;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns boolean if listener exists
+     * @param listenerPrompt
+     * @return
+     */
+    public boolean listenerExists(String listenerPrompt) {
+        for (BungeeCherryListener listener : getListenerList()) {
+            if (listener.getListenerName().equalsIgnoreCase(listenerPrompt)) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     //==================================================================================================================

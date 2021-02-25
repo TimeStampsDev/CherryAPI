@@ -23,7 +23,7 @@ public class PlayerListCommand extends BungeeCherryCommand {
     //==================================================================================================================
 
     public PlayerListCommand() {
-        super(false, "playerlist","plist");
+        super(false, "playerlist",new String[] {"plist"});
     }
 
     //==================================================================================================================

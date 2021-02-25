@@ -3,20 +3,19 @@ package net.cherryflavor.api.bungee.plugin.commands;
 import net.cherryflavor.api.bungee.command.BungeeCherryCommand;
 import net.cherryflavor.api.bungee.player.BungeePlayer;
 import net.md_5.bungee.api.CommandSender;
-import net.md_5.bungee.api.config.ServerInfo;
 
 /**
  * Created on 2/24/21
- * Time 6:18 PM
+ * Time 7:03 PM
  */
-public class FindCommand extends BungeeCherryCommand {
+public class IPCommand extends BungeeCherryCommand {
 
     //==================================================================================================================
     // CONSTRUCTORS
     //==================================================================================================================
 
-    public FindCommand() {
-        super(false,"find",new String[] {"locate"});
+    public IPCommand() {
+        super(false, "ip", new String[] {"getip","findip"});
 
         addTabToBoth(1, getAPI().getStringListOfOnlinePlayers());
     }
@@ -24,10 +23,6 @@ public class FindCommand extends BungeeCherryCommand {
     //==================================================================================================================
     // GETTERS
     //==================================================================================================================
-
-    public ServerInfo find(BungeePlayer bungeePlayer) {
-        return bungeePlayer.getCurrentServerInfo();
-    }
 
     //==================================================================================================================
     // SETTERS
@@ -40,34 +35,33 @@ public class FindCommand extends BungeeCherryCommand {
     @Override
     public void playerExecute(BungeePlayer player, String[] args) {
         if (args.length == 0) {
-            player.sendColorfulMessage("&cUsage: /find <player>");
+            player.sendColorfulMessage("&cUsage: /ip <player>");
         } else if (args.length == 1) {
             if (getAPI().isOnline(args[0])) {
                 BungeePlayer target = new BungeePlayer(args[0]);
-                ServerInfo info = target.getCurrentServerInfo();
-                player.sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("player-found-message"), target.getUsername(), info.getName()));
+                player.sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("ip-is-message"),target.getUsername(), target.getIPAddress().getHostString()));
             } else {
                 player.sendColorfulMessage(getAPI().getBasicMessages().getString("player-not-online"));
             }
         } else {
-            player.sendColorfulMessage("&cUsage: /find <player>");
+            player.sendColorfulMessage("&cUsage: /ip <player>");
         }
     }
 
     @Override
     public void consoleExecute(CommandSender console, String[] args) {
         if (args.length == 0) {
-            sendColorfulMessage("&cUsage: /find <player>");
+            sendColorfulMessage("&cUsage: /ip <player>");
         } else if (args.length == 1) {
             if (getAPI().isOnline(args[0])) {
                 BungeePlayer target = new BungeePlayer(args[0]);
-                ServerInfo info = target.getCurrentServerInfo();
-                sendColorfulMessage("&e" + target.getUsername() + " &7is located on &e" + info.getName() + "&7.");
+                sendColorfulMessage("&e" + target.getUsername() + "'s &7ip address is &e" + target.getIPAddress().getHostString());
             } else {
                 sendColorfulMessage("&cPlayer provided is not online");
             }
         } else {
-            sendColorfulMessage("&cUsage: /find <player>");
+            sendColorfulMessage("&cUsage: /ip <player>");
         }
     }
+
 }

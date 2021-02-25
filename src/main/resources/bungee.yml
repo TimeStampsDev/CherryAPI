@@ -7,3 +7,5 @@ commands:
   sendto:
   playerlist:
   find:
+  ip:
+  handlermng:

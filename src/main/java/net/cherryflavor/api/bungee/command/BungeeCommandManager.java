@@ -68,6 +68,36 @@ public class BungeeCommandManager {
         return commands;
     }
 
+    /**
+     * Returns command
+     * @param command
+     * @return
+     */
+    public BungeeCherryCommand getCommand(String command) {
+        for (BungeeCherryCommand cmd : getCommandList()) {
+            if (cmd.getCommand().toLowerCase().equalsIgnoreCase(command.toLowerCase())) {
+                return cmd;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Returns boolean is command exists
+     * @param command
+     * @return
+     */
+    public boolean commandExists(String command) {
+        for (BungeeCherryCommand cmd : getCommandList()) {
+            if (cmd.getCommand().toLowerCase().equalsIgnoreCase(command.toLowerCase())) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
+    }
+
     //==================================================================================================================
     // SETTERS
     //==================================================================================================================

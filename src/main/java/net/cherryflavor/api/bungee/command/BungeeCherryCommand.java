@@ -313,11 +313,23 @@ public abstract class BungeeCherryCommand extends Command implements TabExecutor
     }
 
     /**
-     * Sends commandSender a colorful message
+     * Sends commandSender a message
      * @param message
      */
-    public void sendColorfulMessage(String message) {
-        sender.sendMessage(TextFormat.colorize(message));
+    public void sendColorfulMessage(String... message) {
+        for (String m : message) {
+            sender.sendMessage(TextFormat.colorize(m));
+        }
+    }
+
+    /**
+     * Sends commandSender a message
+     * @param message
+     */
+    public void sendColorfulMessage(List<String> message) {
+        for (String m : message) {
+            sender.sendMessage(TextFormat.colorize(m));
+        }
     }
 
 }

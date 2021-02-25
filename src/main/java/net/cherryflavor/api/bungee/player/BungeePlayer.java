@@ -8,6 +8,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
+import java.net.InetSocketAddress;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -128,11 +130,29 @@ public class BungeePlayer extends User {
     }
 
     /**
+     * Send player colored message
+     * @param message
+     */
+    public void sendColorfulMessage(List<String> message) {
+        for (String m : message) {
+            player.sendMessage(TextFormat.colorize(m));
+        }
+    }
+
+    /**
      * Sends player to server
      * @param info
      */
     public void sendTo(ServerInfo info) {
         player.connect(info);
+    }
+
+    /**
+     * Gets IP Address
+     * @return
+     */
+    public InetSocketAddress getIPAddress() {
+        return player.getAddress();
     }
 
 }
