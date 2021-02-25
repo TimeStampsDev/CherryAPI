@@ -75,7 +75,7 @@ public class BungeeCommandManager {
      */
     public BungeeCherryCommand getCommand(String command) {
         for (BungeeCherryCommand cmd : getCommandList()) {
-            if (cmd.getCommand().toLowerCase().equalsIgnoreCase(command.toLowerCase())) {
+            if (cmd.getCommand().equalsIgnoreCase(command)) {
                 return cmd;
             }
         }
@@ -89,7 +89,7 @@ public class BungeeCommandManager {
      */
     public boolean commandExists(String command) {
         for (BungeeCherryCommand cmd : getCommandList()) {
-            if (cmd.getCommand().toLowerCase().equalsIgnoreCase(command.toLowerCase())) {
+            if (cmd.getCommand().equalsIgnoreCase(command)) {
                 return true;
             } else {
                 return false;
@@ -125,7 +125,7 @@ public class BungeeCommandManager {
         api.registerCommand(command);
         for (BungeeCherryCommand c : command)  {
             commandList.add(c);
-            api.debug("[CommandManager] " + c.getClass().getName() + " has been registered");
+            api.debug("[CommandManager] " + c.getClass().getSimpleName() + " has been registered");
         }
     }
 
@@ -137,7 +137,7 @@ public class BungeeCommandManager {
         api.unregisterCommand(command);
         for (BungeeCherryCommand c : command) {
             commandList.remove(c);
-            api.debug("[CommandManager] " + c.getClass().getName() + " has been unregistered");
+            api.debug("[CommandManager] " + c.getClass().getSimpleName() + " has been unregistered");
         }
     }
 

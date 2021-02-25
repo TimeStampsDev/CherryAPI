@@ -7,6 +7,8 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -15,9 +17,11 @@ import java.util.UUID;
  */
 public class User {
 
+    public static Map<ProxiedPlayer, UUID> playerUUIDMap = new HashMap<>();
+    public static Map<UUID, String> playerUsernameMap = new HashMap<>();
+
     private UUID uuid;
     private String username;
-    private TimeStampName[] nameHistory;
 
     //==================================================================================================================
     // CONSTRUCTORS
@@ -29,7 +33,6 @@ public class User {
     public User(UUID uuid) {
         this.uuid = uuid;
         this.username = callUsername(this.uuid);
-        this.nameHistory = callNameHistory(this.uuid);
     }
 
     /**
@@ -38,7 +41,6 @@ public class User {
     public User(Player bukkitPlayer) {
         this.uuid = bukkitPlayer.getUniqueId();
         this.username = bukkitPlayer.getName();
-        this.nameHistory = callNameHistory(this.uuid);
     }
 
     /**
@@ -47,7 +49,6 @@ public class User {
     public User(ProxiedPlayer proxiedPlayer) {
         this.uuid = proxiedPlayer.getUniqueId();
         this.username = proxiedPlayer.getName();
-        this.nameHistory = callNameHistory(this.uuid);
     }
 
     //==================================================================================================================
@@ -74,7 +75,7 @@ public class User {
      * @return name history retrieved by @MojangAPI
      */
     public TimeStampName[] getNameHistory() {
-        return nameHistory;
+        return callNameHistory(this.uuid);
     }
 
     /**
@@ -101,12 +102,16 @@ public class User {
      */
     private String callUsername(UUID uuid) {
         String username = null;
-        try {
-            username = MojangAPI.getCurrentName(uuid);
-        } catch (MojangAPIException e) {
-            e.printStackTrace();
+        if (playerUsernameMap.get(uuid) != null) {
+            return playerUsernameMap.get(uuid);
+        } else {
+            try {
+                username = MojangAPI.getCurrentName(uuid);
+            } catch (MojangAPIException e) {
+                e.printStackTrace();
+            }
+            return username;
         }
-        return username;
     }
 
 }

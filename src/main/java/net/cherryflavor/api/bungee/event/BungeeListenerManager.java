@@ -101,14 +101,16 @@ public class BungeeListenerManager {
     public void registerListener(BungeeCherryListener... listener) {
         for (BungeeCherryListener l : listener) {
             api.getPlugin().getProxy().getPluginManager().registerListener(api.getPlugin(), l);
-            api.debug("[ListenerManager] " + l.getClass().getName() + " has been registered");
+            api.debug("[ListenerManager] " + l.getClass().getSimpleName() + " has been registered");
+            listenerList.add(l);
         }
     }
 
     public void unregisterListener(BungeeCherryListener... listener) {
         for (BungeeCherryListener l : listener) {
             api.getPlugin().getProxy().getPluginManager().unregisterListener(l);
-            api.debug("[ListenerManager] " + l.getClass().getName() + " has been unregistered");
+            api.debug("[ListenerManager] " + l.getClass().getSimpleName() + " has been unregistered");
+            listenerList.remove(l);
         }
     }
 

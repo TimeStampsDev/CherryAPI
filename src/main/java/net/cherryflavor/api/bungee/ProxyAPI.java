@@ -5,6 +5,7 @@ import net.cherryflavor.api.bungee.command.BungeeCommandManager;
 import net.cherryflavor.api.bungee.event.BungeeListenerManager;
 import net.cherryflavor.api.bungee.player.BungeePlayer;
 import net.cherryflavor.api.bungee.plugin.commands.*;
+import net.cherryflavor.api.bungee.plugin.listeners.JoinEvent;
 import net.cherryflavor.api.configuration.CherryConfig;
 import net.cherryflavor.api.configuration.Configuration;
 import net.cherryflavor.api.database.DatabaseManager;
@@ -63,12 +64,16 @@ public class ProxyAPI {
 
         checkAllServers();
 
-        registerCommand(
+        getCommandManager().registerCommand(
                 new ServerCommand(),
                 new PlayerListCommand(),
                 new FindCommand(),
                 new IPCommand(),
                 new HandlerManageCommand()
+        );
+
+        getListenerManager().registerListener(
+                new JoinEvent()
         );
     }
 

@@ -74,11 +74,7 @@ public class PageMaker {
      * @return
      */
     public List<Object> getPage(int pageNumber) {
-        if (pageNumber > numberOfPages) {
-            throw new IndexOutOfBoundsException("Page number exceeds max number of pages");
-        } else {
-            return valuesSplitMap.get(pageNumber);
-        }
+        return valuesSplitMap.get(pageNumber);
     }
 
     //==================================================================================================================
@@ -90,14 +86,27 @@ public class PageMaker {
     //==================================================================================================================
 
     /**
-     * Add pages individually
+     * Adds data
      * @param pageEntry
      */
-    public void addPage(Object... pageEntry) {
-        if (pageEntry.length > amountPerPage) {
-            for (Object entry : pageEntry) {
-                valueList.add(entry);
-            }
+    public void addData(Object... pageEntry) {
+        for (Object entry : pageEntry) {
+            valueList.add(entry);
         }
+        refreshPages();
+    }
+
+    /**
+     * Refreshes pages
+     */
+    public void refreshPages() {
+        List<List<Object>> contentPages = Lists.partition(valueList, amountPerPage);
+
+        int numberOfPages = 0;
+        for (int i = 0; i < contentPages.size(); i++) {
+            valuesSplitMap.put(i, contentPages.get(i));
+            numberOfPages++;
+        }
+        this.numberOfPages = numberOfPages;
     }
 }
