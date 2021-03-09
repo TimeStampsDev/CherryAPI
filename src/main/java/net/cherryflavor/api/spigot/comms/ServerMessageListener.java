@@ -42,7 +42,7 @@ public class ServerMessageListener implements PluginMessageListener {
         ByteArrayDataInput input = ByteStreams.newDataInput(message);
         String subchannel = input.readUTF();
 
-        ServerCommsEvent serverCommsEvent = new ServerCommsEvent(subchannel, message);
+        ServerCommsEvent serverCommsEvent = new ServerCommsEvent(ChannelCommType.RECIEVED, subchannel, message);
         Bukkit.getPluginManager().callEvent(serverCommsEvent);
     }
 

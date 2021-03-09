@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class ServerListenerManager {
 
+    private String debugPrefix = "[ListenerManager]";
+
     private List<ServerCherryListener> listenerList;
 
     private List<String> listenerNameList;
@@ -31,6 +33,14 @@ public class ServerListenerManager {
     // GETTERS
     //==================================================================================================================
 
+
+    /**
+     *
+     * @return
+     */
+    public String getDebugPrefix() {
+        return debugPrefix;
+    }
 
     /**
      *
@@ -84,7 +94,7 @@ public class ServerListenerManager {
         for (ServerCherryListener l : listener) {
             if (!listenerNameList.contains(l.getListenerName())) {
                 api.getPlugin().getServer().getPluginManager().registerEvents(l, api.getPlugin());
-                api.debug("[ListenerManager] " + l.getListenerName() + " has been registered");
+                api.debug(getDebugPrefix() + " " + l.getListenerName() + " has been registered");
             }
         }
     }

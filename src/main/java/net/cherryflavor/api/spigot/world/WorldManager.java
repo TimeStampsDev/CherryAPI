@@ -24,6 +24,8 @@ import java.util.List;
  */
 public class WorldManager {
 
+    private String debugPrefix = "[WorldManager]";
+
     public static String accessPermission = "cherryworlds.";
 
     private ServerAPI serverAPI;
@@ -38,9 +40,9 @@ public class WorldManager {
     //==================================================================================================================
 
     /**
-     * @param serverAPI
+     * @param api
      */
-    public WorldManager(ServerAPI serverAPI) {
+    public WorldManager(ServerAPI api) {
         this.serverAPI = serverAPI;
         this.worlds = serverAPI.getServer().getWorlds();
         this.cherryWorlds = new ArrayList<>();
@@ -50,6 +52,15 @@ public class WorldManager {
     //==================================================================================================================
     // GETTERS
     //==================================================================================================================
+
+
+    /**
+     *
+     * @return
+     */
+    public String getDebugPrefix() {
+        return debugPrefix;
+    }
 
     /**
      * Gets list of worlds
@@ -118,7 +129,7 @@ public class WorldManager {
 
                 newWorld.createWorld();
 
-                getAPI().debug("[WorldManager] " + worldName + " has been successfully created");
+                getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
             } else {
                 throw new WorldManageException(worldName + " already exists, try another name");
             }
@@ -132,7 +143,7 @@ public class WorldManager {
 
                 newWorld.createWorld();
 
-                getAPI().debug("[WorldManager] " + worldName + " has been successfully created");
+                getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
             } else {
                 throw new WorldManageException(worldName + " already exists, try another name");
             }
@@ -146,7 +157,7 @@ public class WorldManager {
 
                 newWorld.createWorld();
 
-                getAPI().debug("[WorldManager] " + worldName + " has been successfully created");
+                getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
 
             } else {
                 throw new WorldManageException(worldName + " already exists, try another name");
@@ -161,7 +172,7 @@ public class WorldManager {
 
                 newWorld.createWorld();
 
-                getAPI().debug("[WorldManager] " + worldName + " has been successfully created");
+                getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
 
             } else {
                 throw new WorldManageException(worldName + " already exists, try another name");
@@ -193,12 +204,12 @@ public class WorldManager {
                 cherryWorld.load();
                 worlds.add(cherryWorld.getWorld());
 
-                ServerAPI.getAPI().debug("[WorldManager] " + cherryWorld.getWorldName() + " has been loaded");
+                ServerAPI.getAPI().debug(getDebugPrefix() + " " + cherryWorld.getWorldName() + " has been loaded");
             } else {
                 CherryWorld cherryWorld = new CherryWorld(worldName);
                 cherryWorld.load();
                 worlds.add(cherryWorld.getWorld());
-                ServerAPI.getAPI().debug("[WorldManager] " + cherryWorld.getWorldName() + " has been already loaded");
+                ServerAPI.getAPI().debug(getDebugPrefix() + " " + cherryWorld.getWorldName() + " has been already loaded");
             }
         }
     }
@@ -211,7 +222,7 @@ public class WorldManager {
         if (new File(worldFolderName).exists()) {
             if (getAPI().getServer().getWorld(worldFolderName) != null) {
                 new WorldCreator(worldFolderName).createWorld();
-                getAPI().debug("[WorldManager] " + worldFolderName + " has been successfully loaded");
+                getAPI().debug(getDebugPrefix() + " " + worldFolderName + " has been successfully loaded");
             }
         } else {
             throw new NullPointerException("World " + worldFolderName + " does not exists, check names");
@@ -241,7 +252,7 @@ public class WorldManager {
         } else {
             getAPI().getServer().unloadWorld(getAPI().getServer().getWorld(world), false);
 
-            getAPI().debug("[WorldManager] " + world + " has been successfully unloaded");
+            getAPI().debug(getDebugPrefix() + " " + world + " has been successfully unloaded");
         }
     }
 
@@ -251,7 +262,7 @@ public class WorldManager {
     public void saveWorlds() {
         for (CherryWorld world : cherryWorlds) {
             world.getWorld().save();
-            ServerAPI.getAPI().debug("[WorldManager] " + world.getWorldName() + " has been saved");
+            ServerAPI.getAPI().debug(getDebugPrefix() + " " + world.getWorldName() + " has been saved");
         }
     }
     
@@ -284,6 +295,7 @@ public class WorldManager {
             world.getConfig().saveFile();
             WorldFlagAddEvent event = new WorldFlagAddEvent(world,flag);
             Bukkit.getPluginManager().callEvent(event);
+            getAPI().debug(getDebugPrefix() + " " + flag.getConfigTag() + " has been added to " + world.getWorldName());
         } else {
             throw new WorldManageException("Flag already added");
         }
@@ -300,6 +312,7 @@ public class WorldManager {
             world.getConfig().saveFile();
             WorldFlagRemoveEvent event = new WorldFlagRemoveEvent(world, flag);
             Bukkit.getPluginManager().callEvent(event);
+            getAPI().debug(getDebugPrefix() + " " + flag.getConfigTag() + " has been removed to " + world.getWorldName());
         } else {
             throw new WorldManageException("Flag already removed");
         }

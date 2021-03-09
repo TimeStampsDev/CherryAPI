@@ -17,6 +17,7 @@ public class SpigotCherry extends JavaPlugin {
     public void onEnable() {
         serverAPI = new ServerAPI(this);
 
+
     }
 
     public void onDisable() {

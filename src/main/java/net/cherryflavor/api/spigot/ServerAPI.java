@@ -6,6 +6,7 @@ import net.cherryflavor.api.database.DatabaseManager;
 import net.cherryflavor.api.database.users.User;
 import net.cherryflavor.api.spigot.command.ServerCherryCommand;
 import net.cherryflavor.api.spigot.command.ServerCommandManager;
+import net.cherryflavor.api.spigot.comms.ServerMessageController;
 import net.cherryflavor.api.spigot.comms.ServerMessageListener;
 import net.cherryflavor.api.spigot.event.ServerListenerManager;
 import net.cherryflavor.api.spigot.player.OnlinePlayer;
@@ -34,10 +35,11 @@ public class ServerAPI {
 
     public static JavaPlugin plugin;
     private static ServerAPI api;
-    private static DatabaseManager databaseManager;
-    private static ServerCommandManager commandManager;
-    private static ServerListenerManager listenerManager;
-    private static WorldManager worldManager;
+    private DatabaseManager databaseManager;
+    private ServerCommandManager commandManager;
+    private ServerListenerManager listenerManager;
+    private WorldManager worldManager;
+    private ServerMessageController serverMessageController;
 
     private static Configuration basicMessagesConfig;
     private static Configuration config;
@@ -66,6 +68,7 @@ public class ServerAPI {
         commandManager = new ServerCommandManager(this);
         listenerManager = new ServerListenerManager(this);
         worldManager = new WorldManager(this);
+        serverMessageController = new ServerMessageController(this);
 
         permissionsMap = new HashMap<>();
 
@@ -94,10 +97,13 @@ public class ServerAPI {
     public static ServerAPI getAPI() { return api; }
     public static JavaPlugin getPlugin() { return plugin; }
 
-    public static DatabaseManager getDatabaseManager() { return databaseManager; }
-    public static ServerCommandManager getCommandManager() { return commandManager; }
-    public static ServerListenerManager getListenerManager() { return listenerManager; }
-    public static WorldManager getWorldManager() { return worldManager; }
+    public DatabaseManager getDatabaseManager() { return databaseManager; }
+    public ServerCommandManager getCommandManager() { return commandManager; }
+    public ServerListenerManager getListenerManager() { return listenerManager; }
+    public WorldManager getWorldManager() { return worldManager; }
+    public ServerMessageController getServerMessageController() {
+        return serverMessageController;
+    }
 
     public Configuration getBasicMessages() { return basicMessagesConfig; }
     public Configuration getConfig() { return config; }

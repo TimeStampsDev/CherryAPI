@@ -73,7 +73,7 @@ public class CherryWorld {
         }
 
         if (Bukkit.getWorld(getWorldName()) == null) {
-            ServerAPI.getWorldManager().loadWorld(worldName);
+            ServerAPI.getAPI().getWorldManager().loadWorld(worldName);
         }
 
         this.world = Bukkit.getWorld(worldName);
@@ -108,7 +108,7 @@ public class CherryWorld {
         }
 
         if (Bukkit.getWorld(getWorldName()) == null) {
-            ServerAPI.getWorldManager().loadWorld(worldName);
+            ServerAPI.getAPI().getWorldManager().loadWorld(worldName);
         }
 
         this.world = Bukkit.getWorld(worldName);
@@ -142,7 +142,7 @@ public class CherryWorld {
         }
 
         if (Bukkit.getWorld(getWorldName()) == null) {
-            ServerAPI.getWorldManager().loadWorld(worldName);
+            ServerAPI.getAPI().getWorldManager().loadWorld(worldName);
         }
 
         this.world = Bukkit.getWorld(worldName);
@@ -226,7 +226,7 @@ public class CherryWorld {
 
             if (eventsLoaded == false) {
                 eventsLoaded = true;
-                ServerAPI.getListenerManager().registerListener(
+                ServerAPI.getAPI().getListenerManager().registerListener(
                         new FALL(),
                         new PASSIVE_SPAWN(),
                         new HOSTILE_SPAWN(),
@@ -235,7 +235,7 @@ public class CherryWorld {
             }
 
             if (Bukkit.getServer().getWorld(worldName) == null) {
-                ServerAPI.getWorldManager().loadWorld(worldName);
+                ServerAPI.getAPI().getWorldManager().loadWorld(worldName);
                 this.world = Bukkit.getServer().getWorld(worldName);
             } else {
                 this.world = Bukkit.getServer().getWorld(worldName);
@@ -351,6 +351,7 @@ public class CherryWorld {
                         Player attacker = (Player) event.getDamager();
                         OnlinePlayer damager = new OnlinePlayer(attacker);
                         if (getWorldFlags().contains(WorldFlag.NO_PVP)) {
+
                             event.setCancelled(true);
                             damager.sendColorfulMessage(ServerAPI.getAPI().getBasicMessages().getString("pvp-disabled"));
                         }

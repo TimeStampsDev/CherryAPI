@@ -18,6 +18,7 @@ import org.bukkit.command.CommandSender;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created on 3/2/2021
@@ -98,10 +99,29 @@ public class WorldManageCommand extends ServerCherryCommand {
     // METHODS
     //==================================================================================================================
 
+    /**
+     * always true
+     * @param arg
+     * @return
+     */
+    public boolean situationArg(String arg) {
+        switch (arg.toLowerCase()) {
+            case "create" : sendColorfulMessage("&cUsage: /worldmng create <worldname> <type>"); break;
+            case "delete" : sendColorfulMessage("&cUsage: /worldmng delete <worldname>"); break;
+            case "info" : sendColorfulMessage("&cUsage: /worldmng info <world>"); break;
+            case "setspawn" : sendColorfulMessage("&cUsage: /worldmng setspawn <world>"); break;
+            case "setmaxplayers" : sendColorfulMessage("&cUsage: /worldmng setmaxplayers <world> <max>"); break;
+            case "addflag" : sendColorfulMessage("&cUsage: /worldmng addflag <worldname> <flag>"); break;
+            case "removeflag" : sendColorfulMessage("&cUsage: /worldmng removeflag <worldname> <flag>"); break;
+            default: sendColorfulMessage("&cUsage: /worldmng help [1-" + getHelpPage().getNumberOfPages() + "]");
+        }
+        return true;
+    }
+
     @Override
     public boolean playerExecute(OnlinePlayer player, Command command, String label, String[] args) {
         if (args.length == 0) {
-            player.sendColorfulMessage("&cUsage: /worldmng help [1-" + getHelpPage().getNumberOfPages() + "]");
+            sendColorfulMessage("&cUsage: /worldmng help [1-" + getHelpPage().getNumberOfPages() + "]");
         } else if (args.length == 1) {
             if (args[0].equalsIgnoreCase("list")) {
                 int n = 0;
@@ -120,7 +140,7 @@ public class WorldManageCommand extends ServerCherryCommand {
                     sendColorfulMessage("&7#" + n + " &e" + TextFormat.addRightPadding(flag.getLabel(), ' ', 20) + "&7" + flag.getDescription());
                 }
             } else {
-                player.sendColorfulMessage("&cUsage: /worldmng help [1-" + getHelpPage().getNumberOfPages() + "]");
+                return situationArg(args[0]);
             }
         } else if (args.length == 2) {
             if (args[0].equalsIgnoreCase("info")) {
@@ -155,6 +175,8 @@ public class WorldManageCommand extends ServerCherryCommand {
                 }
             } else if (args[0].equalsIgnoreCase("setmaxplayers")) {
                 player.sendColorfulMessage("&cUsage: /worldmng setmaxplayers <world> <size>");
+            } else {
+                return situationArg(args[0]);
             }
         } else if (args.length == 3) {
             if (args[0].equalsIgnoreCase("setmaxplayers")) {
@@ -210,6 +232,8 @@ public class WorldManageCommand extends ServerCherryCommand {
                         }
                     }
                 }
+            } else {
+                return situationArg(args[0]);
             }
         }
         return false;

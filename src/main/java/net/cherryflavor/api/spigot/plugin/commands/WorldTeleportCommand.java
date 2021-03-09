@@ -37,7 +37,7 @@ public class WorldTeleportCommand extends ServerCherryCommand {
      */
     public List<String> getWorldList() {
         List<String> worldList = new ArrayList<>();
-        for (World world : ServerAPI.getWorldManager().getWorlds()) {
+        for (World world : ServerAPI.getAPI().getWorldManager().getWorlds()) {
             worldList.add(world.getName());
         }
         return  worldList;

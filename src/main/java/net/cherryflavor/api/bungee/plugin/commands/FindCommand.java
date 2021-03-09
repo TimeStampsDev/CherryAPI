@@ -40,17 +40,17 @@ public class FindCommand extends BungeeCherryCommand {
     @Override
     public void playerExecute(BungeePlayer player, String[] args) {
         if (args.length == 0) {
-            player.sendColorfulMessage("&cUsage: /find <player>");
+            sendColorfulMessage("&cUsage: /find <player>");
         } else if (args.length == 1) {
             if (getAPI().isOnline(args[0])) {
                 BungeePlayer target = new BungeePlayer(args[0]);
                 ServerInfo info = target.getCurrentServerInfo();
-                player.sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("player-found-message"), target.getUsername(), info.getName()));
+                sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("player-found-message"), target.getUsername(), info.getName()));
             } else {
-                player.sendColorfulMessage(getAPI().getBasicMessages().getString("player-not-online"));
+                sendColorfulMessage(getAPI().getBasicMessages().getString("player-not-online"));
             }
         } else {
-            player.sendColorfulMessage("&cUsage: /find <player>");
+            sendColorfulMessage("&cUsage: /find <player>");
         }
     }
 
@@ -62,7 +62,7 @@ public class FindCommand extends BungeeCherryCommand {
             if (getAPI().isOnline(args[0])) {
                 BungeePlayer target = new BungeePlayer(args[0]);
                 ServerInfo info = target.getCurrentServerInfo();
-                sendColorfulMessage("&e" + target.getUsername() + " &7is located on &e" + info.getName() + "&7.");
+                sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("player-found-message"), target.getUsername(), info.getName()));
             } else {
                 sendColorfulMessage("&cPlayer provided is not online");
             }

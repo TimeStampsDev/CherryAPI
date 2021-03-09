@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class ServerCommandManager {
 
+    private String debugPrefix = "[CommandManager]";
+
     private List<ServerCherryCommand> commandList;
 
     private ServerAPI api;
@@ -27,6 +29,11 @@ public class ServerCommandManager {
     //==================================================================================================================
     // GETTERS
     //==================================================================================================================
+
+
+    public String getDebugPrefix() {
+        return debugPrefix;
+    }
 
     public List<ServerCherryCommand> getCommandList() {
         return commandList;
@@ -56,7 +63,7 @@ public class ServerCommandManager {
         api.registerCommand(command);
         for (ServerCherryCommand c : command)  {
             commandList.add(c);
-            api.debug("[CommandManager] " + c.getClass().getSimpleName() + " has been registered");
+            api.debug(getDebugPrefix() + " " + c.getClass().getSimpleName() + " has been registered");
         }
     }
 

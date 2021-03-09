@@ -9,6 +9,7 @@ import org.bukkit.event.HandlerList;
  */
 public class ServerCommsEvent extends Event {
 
+    private ChannelCommType commType;
     private String subchannel;
     private byte[] message;
     private static final HandlerList HANDLERS_LIST = new HandlerList();
@@ -18,7 +19,8 @@ public class ServerCommsEvent extends Event {
     // CONSTRUCTORS
     //==================================================================================================================
 
-    public ServerCommsEvent(String subchannel, byte[] message) {
+    public ServerCommsEvent(ChannelCommType commType, String subchannel, byte[] message) {
+        this.commType = commType;
         this.subchannel = subchannel;
         this.message = message;
     }
