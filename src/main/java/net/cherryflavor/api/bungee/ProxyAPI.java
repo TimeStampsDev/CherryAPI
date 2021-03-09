@@ -77,6 +77,10 @@ public class ProxyAPI {
         getListenerManager().registerListener(
                 new JoinEvent()
         );
+
+        getListenerManager().registerListener(
+                new JoinEvent()
+        );
     }
 
     //==================================================================================================================
