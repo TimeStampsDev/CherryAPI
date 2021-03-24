@@ -6,7 +6,6 @@ import net.cherryflavor.api.exceptions.InvalidAPIObjectException;
 import net.cherryflavor.api.other.PageMaker;
 import net.cherryflavor.api.other.PagePreviewBuilder;
 import net.cherryflavor.api.spigot.ServerAPI;
-import net.cherryflavor.api.tools.TextFormat;
 
 import java.util.ArrayList;
 import java.util.List;

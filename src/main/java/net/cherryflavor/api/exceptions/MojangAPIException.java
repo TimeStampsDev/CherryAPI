@@ -6,7 +6,12 @@ package net.cherryflavor.api.exceptions;
  */
 public class MojangAPIException extends Exception {
 
-    public MojangAPIException(String exception) {
+    /**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public MojangAPIException(String exception) {
         super(exception);
     }
 

@@ -34,8 +34,9 @@ public class ComponentManipulator {
      * @param text
      * @return
      */
+    @Deprecated
     public static TextComponent addHoverText(TextComponent component, String... text) {
-        component.setHoverEvent(HoverComponent.addHoverEvent(HoverEvent.Action.SHOW_TEXT, text));
+        component.setHoverEvent( HoverComponent.addHoverEvent(HoverEvent.Action.SHOW_TEXT, text));
         return component;
     }
 

@@ -6,7 +6,12 @@ package net.cherryflavor.api.exceptions;
  */
 public class InvalidCommsChannelException extends Exception {
 
-    public InvalidCommsChannelException(String message) {
+    /**
+	 *
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public InvalidCommsChannelException(String message) {
         super(message);
     }
 

@@ -15,6 +15,8 @@ import java.util.List;
  */
 public class DatabaseManager {
 
+    private static String prefix = "[DatabaseManager]";
+
     private List<Database> databaseList;
     private static CherryConfig config;
 
@@ -90,7 +92,15 @@ public class DatabaseManager {
      */
     public static void debug(String debugMessage) {
         if (config.getConfig().getBoolean("debug")) {
-            System.out.println("[DatabaseManager] " + debugMessage);
+            System.out.println(this.prefix + " " + debugMessage);
+        }
+    }
+
+    public void addDatabase(Database database) {
+        if (Database d : databaseList) {
+            if (!d.getActualName().equalsIgnoreCase(database.getActualName())) {
+                databaseList.add(database);
+            }
         }
     }
 

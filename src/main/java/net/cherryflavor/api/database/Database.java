@@ -2,7 +2,6 @@ package net.cherryflavor.api.database;
 
 import net.cherryflavor.api.configuration.CherryConfig;
 import net.cherryflavor.api.tools.TextFormat;
-import org.w3c.dom.Text;
 
 import java.sql.*;
 import java.util.Properties;
@@ -52,6 +51,18 @@ public class Database {
     public CherryConfig getCherryConfig() {
         return this.cherryConfig;
     }
+
+    /** Name of Database (Identifier) */
+    protected String getActualName() { return this.name; }
+    protected String getHost() { return this.host; }
+    protected String getPort() { return this.port; }
+    protected Integer getPortAsInteger() { return Integer.valueOf(this.port); }
+
+    /** Name of database being accessed */
+    protected String getDatabaseName() { return this.database; }
+
+    protected String getUsername() { return this.username; }
+    protected String getPassword() { return this.password; }
 
     /**
      * @param query

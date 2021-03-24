@@ -6,6 +6,11 @@ package net.cherryflavor.api.exceptions;
  */
 public class UnserializeObjectException extends RuntimeException {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     public UnserializeObjectException(String exception) {
         super(exception);
     }

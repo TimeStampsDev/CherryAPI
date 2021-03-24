@@ -27,9 +27,9 @@ public class ProxyAPI {
 
     private Plugin plugin;
     private static ProxyAPI api;
-    private static DatabaseManager databaseManager;
-    private static BungeeCommandManager commandManager;
-    private static BungeeListenerManager listenerManager;
+    private DatabaseManager databaseManager;
+    private BungeeCommandManager commandManager;
+    private BungeeListenerManager listenerManager;
 
     private static Configuration basicMessagesConfig;
     private static Configuration config;
@@ -102,19 +102,19 @@ public class ProxyAPI {
      * Gets DatabaseManager
      * @return
      */
-    public static DatabaseManager getDatabaseManager() { return databaseManager; }
+    public DatabaseManager getDatabaseManager() { return databaseManager; }
 
     /**
      * Gets CommandManager
      * @return
      */
-    public static BungeeCommandManager getCommandManager() { return commandManager; }
+    public BungeeCommandManager getCommandManager() { return commandManager; }
 
     /**
      * Gets ListenerManager
      * @return
      */
-    public static BungeeListenerManager getListenerManager() { return listenerManager; }
+    public BungeeListenerManager getListenerManager() { return listenerManager; }
 
     /**
      * Gets Basic-Messages Config

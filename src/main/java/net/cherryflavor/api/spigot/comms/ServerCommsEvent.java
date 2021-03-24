@@ -29,8 +29,15 @@ public class ServerCommsEvent extends Event {
     // GETTERS
     //==================================================================================================================
 
+    public ChannelCommType gCommType() { return this.commType; }
+
+
     public String getSubchannel() { return subchannel; }
     public byte[] getMessage() { return message; }
+
+    public boolean isCancelled() {
+        return isCancelled;
+    }
 
     @Override
     public HandlerList getHandlers() {

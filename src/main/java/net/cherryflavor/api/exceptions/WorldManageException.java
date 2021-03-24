@@ -7,6 +7,11 @@ package net.cherryflavor.api.exceptions;
 
 public class WorldManageException extends RuntimeException {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     public WorldManageException(String exception) {
         super(exception);
     }

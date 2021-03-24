@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import net.cherryflavor.api.tools.TextFormat;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 /**
  * Created on 2/20/2021

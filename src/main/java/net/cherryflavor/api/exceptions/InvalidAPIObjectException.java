@@ -6,6 +6,11 @@ package net.cherryflavor.api.exceptions;
  */
 public class InvalidAPIObjectException extends RuntimeException {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 1L;
+
     public InvalidAPIObjectException(String exception) {
         super(exception);
     }

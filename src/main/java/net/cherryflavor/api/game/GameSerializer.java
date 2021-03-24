@@ -9,8 +9,6 @@ import net.cherryflavor.api.exceptions.UnserializeObjectException;
 
 public class GameSerializer {
 
-    private Game game;
-
     //==================================================================================================================
     // CONSTRUCTORS
     //==================================================================================================================
@@ -20,7 +18,6 @@ public class GameSerializer {
     //==================================================================================================================
 
     public String serialize(Game game) {
-        this.game = game;
         return game.getName() + "/" + game.getDescription().replace(' ', '_') + "/"  + game.getVersion();
     }
 

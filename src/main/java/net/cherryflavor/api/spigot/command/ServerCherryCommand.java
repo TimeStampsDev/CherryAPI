@@ -1,6 +1,5 @@
 package net.cherryflavor.api.spigot.command;
 
-import net.cherryflavor.api.other.PagePreviewBuilder;
 import net.cherryflavor.api.other.TabCommand;
 import net.cherryflavor.api.other.help.HelpPageMaker;
 import net.cherryflavor.api.spigot.ServerAPI;
