@@ -88,7 +88,7 @@ public class WorldManageCommand extends ServerCherryCommand {
      */
     public List<String> createStringWorldFlagList(List<WorldFlag> worldFlags) {
         List<String> worldFlagStringList = new ArrayList<>();
-        String c = ServerAPI.getAPI().getBasicMessages().getString("world-info-message-color");
+        String c = getAPI().getBasicMessages().getString("world-info-message-color");
         for (WorldFlag flag : worldFlags) {
             worldFlagStringList.add("&f" + flag.getLabel());
         }
@@ -171,10 +171,11 @@ public class WorldManageCommand extends ServerCherryCommand {
                     Location currentLocation = player.getLocation();
                     CherryWorld world = new CherryWorld(player.getLocation().getWorld().getName());
                     world.getWorld().setSpawnLocation(currentLocation);
+                    
                     sendColorfulMessage(String.format(ServerAPI.getAPI().getBasicMessages().getString("spawn-location-set"), world.getWorldName()));
                 }
             } else if (args[0].equalsIgnoreCase("setmaxplayers")) {
-                player.sendColorfulMessage("&cUsage: /worldmng setmaxplayers <world> <size>");
+                sendColorfulMessage("&cUsage: /worldmng setmaxplayers <world> <size>");
             } else {
                 return situationArg(args[0]);
             }
