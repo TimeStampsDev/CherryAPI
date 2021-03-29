@@ -6,9 +6,25 @@ package net.cherryflavor.api.spigot.world.generation;
  */
 public enum WorldType {
 
-    END,
-    NETHER,
-    FLAT,
-    NORMAL;
+    END("End"),
+    NETHER("Nether"),
+    FLAT("Flat"),
+    NORMAL("Normal"),
+    VOID("Void");
+
+    String name;
+
+    public WorldType(String name) {
+        this.name = name;
+    }
+
+    public static WorldType parse(String string) {
+        for (WorldType type : values) {
+            if (type.name.equalsIgnoreCase(string)) {
+                return type;
+            }
+        }
+        return null;
+    }
 
 }

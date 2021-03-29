@@ -8,6 +8,8 @@ import net.cherryflavor.api.spigot.world.events.WorldFlagAddEvent;
 import net.cherryflavor.api.spigot.world.events.WorldFlagRemoveEvent;
 import net.cherryflavor.api.spigot.world.generation.WorldType;
 import net.cherryflavor.api.spigot.world.generation.chunkgeneration.FlatWorldChunkGenerator;
+import net.cherryflavor.api.spigot.world.generation.chunkgeneration.VoidWorldChunkGeneration;
+
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
@@ -169,6 +171,28 @@ public class WorldManager {
 
                 WorldCreator newWorld = new WorldCreator(worldName);
                 newWorld.environment(World.Environment.NETHER);
+
+                newWorld.createWorld();
+
+                getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
+
+            } else {
+                throw new WorldManageException(worldName + " already exists, try another name");
+            }
+
+        } else if (type == WorldType.VOID) {
+            
+            if (getAPI().getServer().getWorld(worldName) == null) {
+
+                VoidWorldChunkGeneration voidWorldChunkGeneration = new VoidWorldChunkGeneration(getAPI());
+
+                for (BlockPopulator blockPopulator : blockPopulators) {
+                    voidWorldChunkGeneration.addBlockPopulator(blockPopulator);
+                }
+
+                WorldCreator newWorld = new WorldCreator(worldName);
+
+                newWorld.generator(voidWorldChunkGeneration);
 
                 newWorld.createWorld();
 

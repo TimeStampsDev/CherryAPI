@@ -1,7 +1,6 @@
 package net.cherryflavor.api.mojang;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 import net.cherryflavor.api.exceptions.MojangAPIException;
 import net.cherryflavor.api.mojang.resources.Status;
 import net.cherryflavor.api.mojang.resources.TimeStampName;
@@ -11,7 +10,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.URL;;
+import java.net.URL;
 import java.util.*;
 
 /**
@@ -20,7 +19,6 @@ import java.util.*;
  */
 public class MojangAPI {
 
-    private static JsonParser jsonParser = new JsonParser();
     private static Gson gsonParser = new Gson();
 
     //==================================================================================================================

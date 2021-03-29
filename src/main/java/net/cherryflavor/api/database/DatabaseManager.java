@@ -92,7 +92,7 @@ public class DatabaseManager {
      */
     public static void debug(String debugMessage) {
         if (config.getConfig().getBoolean("debug")) {
-            System.out.println(this.prefix + " " + debugMessage);
+            System.out.println(prefix + " " + debugMessage);
         }
     }
 

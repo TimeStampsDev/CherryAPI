@@ -46,7 +46,7 @@ public class ProxyAPI {
      */
     public ProxyAPI(Plugin plugin) {
         this.plugin = plugin;
-        this.api = this;
+        api = this;
 
         CherryConfig.makeFolder("plugins/CherryAPI");
 

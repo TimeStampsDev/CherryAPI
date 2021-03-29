@@ -5,10 +5,13 @@ import java.util.List;
 
 public enum WorldFlag {
 
-    NO_PVP("No PVP", "Disables PVP in world", "NOPVP"),
+    NO_FALL_DAMAGE("No Fall Damage", "Disables Fall Damage", "NOFALLDAMAGE"),
     NO_HOSTILE_MOBS("No Hostile Mobs", "Disables Hostile Mobs", "NOHOSTILEMOBS"),
     NO_PASSIVE_MOBS("No Passive Mobs", "Disables Passive Mobs", "NOPASSIVEMOBS"),
-    NO_FALL_DAMAGE("No Fall Damage", "Disables Fall Damage", "NOFALLDAMAGE");
+    NO_PVP("No PVP", "Disables PVP in world", "NOPVP"),
+    BLOCK_PLACE("No Blocks Placed", "Prevents Block Placement", "BLOCKPLACE"),
+    BLOCK_DESTROY("No Blocks Destroyed", "Prevents Block Destroyed", "BLOCKDESTROY"),
+    NO_ITEM_DROP("No Item Drops", "Prevents Item Drops", "NOITEMDROP");
 
     String label;
     String description;

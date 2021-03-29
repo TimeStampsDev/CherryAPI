@@ -18,8 +18,18 @@ help:
 
 ####### WORLDMANAGE COMMAND MESSAGES ###################################################################################
 
+world-generated: "&cWorld %s was successfully generated as a %s world."
+## the first %s worldName
+## the second %s previews worldType world was generated as
+world-deleted: "&cWorld %s was successfully deleted, all players sent to default world."
+## %s replaces to world
 world-not-exists: "&cWorld %s doesn't exists."
 ## %s replaces to world
+world-exists: "&cWorld %s already exists."
+## %s replaces to world
+worldtype-not-exists: "&cWorld type %s doesn't exists.\n&cTypes: "
+## %s replaces to world
+world-successfully-loaded: "&cWorld %s was successfully loaded."
 ## %s replaces to world
 sent-player-to-world: "&cYou sent %s to %s successfully."
 ## the first %s playername
@@ -51,6 +61,9 @@ worlds-list-message: "&cThere are currently %s &cavailable."
 ####### WORLD FLAG MESSAGES ############################################################################################
 
 pvp-disabled: "&cPVP is disabled in this world."
+blockplace-disabled: "&cYou cannot place blocks in this world."
+blockdestroy-disabled: "&cYou cannot destroy blocks in this world."
+itemdrop-disabled: "&cYou cannot drop items in this world."
 
 ####### OTHER MESSAGES #################################################################################################
 

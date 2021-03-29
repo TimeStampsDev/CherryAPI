@@ -14,13 +14,18 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.mysql.fabric.Server;
 
 /**
  * Created on 3/2/2021
@@ -356,6 +361,66 @@ public class CherryWorld {
                             damager.sendColorfulMessage(ServerAPI.getAPI().getBasicMessages().getString("pvp-disabled"));
                         }
                     }
+                }
+            }
+        }
+
+    }
+
+    public class BLOCKPLACE extends ServerCherryListener {
+
+        public BLOCKPLACE() {
+            super(worldName + "_BLOCKPLACE", false);
+            worldFlagEvents.add(this);
+        }
+
+        @EventHandler
+        public void event(BlockPlaceEvent event) {
+            OnlinePlayer player = new OnlinePlayer(event.getPlayer());
+            if (getWorldFlags().contains(WorldFlag.BLOCK_PLACE)) {
+                if (!player.hasPermission("cherryapi.flag-override")) {
+                    event.setCancelled(true);
+                    player.sendColorfulMessage(ServerAPI.getAPI().getBasicMessages().getString("blockplace-disabled"));
+                }
+            }
+        }
+
+    }
+
+    public class BLOCKDESTROY extends ServerCherryListener {
+
+        public BLOCKDESTROY() {
+            super(worldName + "_BLOCKDESTROY", false);
+            worldFlagEvents.add(this);
+        }
+
+        @EventHandler
+        public void event(BlockBreakEvent event) {
+            OnlinePlayer player = new OnlinePlayer(event.getPlayer());
+            if (getWorldFlags().contains(WorldFlag.BLOCK_DESTROY)) {
+                if (!player.hasPermission("cherryapi.flag-override")) {
+                    event.setCancelled(true);
+                    player.sendColorfulMessage(ServerAPI.getAPI().getBasicMessages().getString("blockdestroy-disabled"));
+                }
+            }
+        }
+
+    }
+
+    public class NOITEMDROP extends ServerCherryListener {
+
+        public NOITEMDROP() {
+            super(worldName + "_NOITEMDROP", false);
+            worldFlagEvents.add(this);
+        }
+
+        @EventHandler
+        public void event(EntityDropItemEvent event) {
+            if (getWorldFlags().contains(WorldFlag.NO_ITEM_DROP)) {
+                event.setCancelled(true);
+                if (event.getEntity() instanceof Player) {
+                    Player player = (Player) event.getEntity();
+                    new OnlinePlayer(player).sendColorfulMessage(ServerAPI.getAPI().getBasicMessages().getString("itemdrop-disabled"));               
                 }
             }
         }

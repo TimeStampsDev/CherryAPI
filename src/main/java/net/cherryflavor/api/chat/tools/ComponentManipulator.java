@@ -9,6 +9,7 @@ import net.md_5.bungee.api.chat.TextComponent;
  * Created on 2/20/2021
  * Time 12:32 AM
  */
+@Deprecated
 public class ComponentManipulator {
 
     //==================================================================================================================
@@ -36,7 +37,7 @@ public class ComponentManipulator {
      */
     @Deprecated
     public static TextComponent addHoverText(TextComponent component, String... text) {
-        component.setHoverEvent( HoverComponent.addHoverEvent(HoverEvent.Action.SHOW_TEXT, text));
+        component.setHoverEvent(HoverComponent.addHoverEvent(HoverEvent.Action.SHOW_TEXT, text));
         return component;
     }
 

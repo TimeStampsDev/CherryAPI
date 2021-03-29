@@ -16,6 +16,7 @@ import java.security.InvalidParameterException;
  *
  * DOES NOT SUPPORT {@link HoverEvent.Action SHOW_ITEM} THIS IS BECAUSE ITEMSTACK IS IN SERVER SIDE, NOT PROXY!
  */
+@Deprecated
 public class HoverComponent {
 
     public String hoverText;
@@ -97,7 +98,7 @@ public class HoverComponent {
         ComponentBuilder builder = new ComponentBuilder();
 
         for (String t : show) {
-            builder.append(show + "\n");
+            builder.append(t + "\n");
         }
 
         newHoverEvent.setHoverEvent(new HoverEvent(action, builder.create()));
