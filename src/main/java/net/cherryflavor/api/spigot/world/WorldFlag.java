@@ -47,6 +47,30 @@ public enum WorldFlag {
         return configTag;
     }
 
+    public static List<String> stringLabelList() {
+        List<String> sList = new ArrayList<>();
+        for (WorldFlag flag : values()) {
+            sList.add(flag.label);
+        }
+        return sList;
+    }
+
+    public static List<String> stringDescList() {
+        List<String> sList = new ArrayList<>();
+        for (WorldFlag flag : values()) {
+            sList.add(flag.description);
+        }
+        return sList;
+    }
+
+    public static List<String> stringConfgList() {
+        List<String> sList = new ArrayList<>();
+        for (WorldFlag flag : values()) {
+            sList.add(flag.configTag);
+        }
+        return sList;
+    }
+
     public static WorldFlag parseByConfigTag(String string) {
         for (WorldFlag flag : values()) {
             if (flag.getConfigTag().equalsIgnoreCase(string)) {

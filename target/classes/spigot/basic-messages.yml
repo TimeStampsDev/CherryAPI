@@ -18,6 +18,10 @@ help:
 
 ####### WORLDMANAGE COMMAND MESSAGES ###################################################################################
 
+
+world-generating: "&cWorld %s has began to generate."
+## the first %s worldName
+## the second %s previews worldType world was generated as
 world-generated: "&cWorld %s was successfully generated as a %s world."
 ## the first %s worldName
 ## the second %s previews worldType world was generated as
@@ -30,6 +34,8 @@ world-exists: "&cWorld %s already exists."
 worldtype-not-exists: "&cWorld type %s doesn't exists.\n&cTypes: "
 ## %s replaces to world
 world-successfully-loaded: "&cWorld %s was successfully loaded."
+## %s replaces to world
+premade-not-exists: "&cPremade World %s does not exists."
 ## %s replaces to world
 sent-player-to-world: "&cYou sent %s to %s successfully."
 ## the first %s playername
@@ -64,6 +70,20 @@ pvp-disabled: "&cPVP is disabled in this world."
 blockplace-disabled: "&cYou cannot place blocks in this world."
 blockdestroy-disabled: "&cYou cannot destroy blocks in this world."
 itemdrop-disabled: "&cYou cannot drop items in this world."
+
+####### VOTING MESSAGES ################################################################################################
+
+vote-notifications: 
+  reminder: "&fThere are currently %s left of voting! Perform &e/vote"
+  begun: "&fVoting has begun! You have &e%s &fto vote! Perform &e/vote"
+  ended: "&fVoting has ended! &e%candidate% &fhas won with &e%candidateVotes%&f!"
+vote-ballots:
+  inventory:
+    ## material id's are vanilla-based and can be found at 
+    name: "&cVote Here:"
+    candidate-color-name: "&e"
+    candidate-description-color: "&7"
+    candidate-votes: "&7Votes: &e%votes%"
 
 ####### OTHER MESSAGES #################################################################################################
 

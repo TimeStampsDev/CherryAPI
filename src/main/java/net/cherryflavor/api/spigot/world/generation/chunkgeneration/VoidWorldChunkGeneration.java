@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
-import org.bukkit.generator.ChunkGenerator.ChunkData;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
 
 import java.util.ArrayList;
@@ -18,7 +17,7 @@ import java.util.Random;
  * Time 12:20 AM
  */
 
-public class VoidWorldChunkGeneration {
+public class VoidWorldChunkGeneration extends ChunkGenerator {
 
     ServerAPI serverAPI;
 

@@ -1,5 +1,10 @@
 package net.cherryflavor.api.mojang;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import net.cherryflavor.api.tools.TextFormat;
+
 /**
  *
  * Created on 2/20/2021
@@ -152,6 +157,30 @@ public enum GameAchievements {
      * @return
      */
     public String getDescription() { return description; }
+
+    private static List<String> getAchievementsAsStringList() {
+        List<String> sList = new ArrayList<>();
+        for (GameAchievements achievement : GameAchievements.values()) {
+            sList.add(achievement.getAchievementLabel().replace(" ", "_"));   
+        }
+        return sList;
+    }
+
+    public static void preview() {
+        int longest = TextFormat.getLongestString(getAchievementsAsStringList()).length();
+
+        System.out.println("     " + TextFormat.addRightPadding("Label:", ' ', longest) + " Description:");
+
+        int n = 0;
+        for (GameAchievements achievement : GameAchievements.values()) {
+            
+            String label = achievement.getAchievementLabel();
+            String desc = achievement.getDescription();
+
+            System.out.println(TextFormat.addRightPadding("#" + n, ' ', 5) + TextFormat.addRightPadding(label, ' ', longest) + " " + desc.replace("\n", ""));
+            n++;
+        }
+    }
 
 
 

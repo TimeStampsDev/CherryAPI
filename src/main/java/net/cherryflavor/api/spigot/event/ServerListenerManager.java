@@ -90,11 +90,25 @@ public class ServerListenerManager {
     // METHODS
     //==================================================================================================================
 
+    public void debug(String message) {
+        api.debug(getDebugPrefix() + " " + message);
+    }
+
     public void registerListener(ServerCherryListener... listener) {
         for (ServerCherryListener l : listener) {
             if (!listenerNameList.contains(l.getListenerName())) {
-                api.getPlugin().getServer().getPluginManager().registerEvents(l, api.getPlugin());
-                api.debug(getDebugPrefix() + " " + l.getListenerName() + " has been registered");
+                listenerNameList.add(l.getListenerName());
+                ServerAPI.getPlugin().getServer().getPluginManager().registerEvents(l, ServerAPI.getPlugin());
+                debug(getDebugPrefix() + " " + l.getListenerName() + " has been registered");
+            }
+        }
+    }
+
+    public void silentRegisterListener(ServerCherryListener... listener) {
+        for (ServerCherryListener l : listener) {
+            if (!listenerNameList.contains(l.getListenerName())) {
+                listenerNameList.add(l.getListenerName());
+                ServerAPI.getPlugin().getServer().getPluginManager().registerEvents(l, ServerAPI.getPlugin());
             }
         }
     }

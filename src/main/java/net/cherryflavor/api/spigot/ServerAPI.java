@@ -14,12 +14,9 @@ import net.cherryflavor.api.spigot.plugin.commands.WorldManageCommand;
 import net.cherryflavor.api.spigot.plugin.commands.WorldTeleportCommand;
 import net.cherryflavor.api.spigot.plugin.events.JoinEvent;
 import net.cherryflavor.api.spigot.world.WorldManager;
-import net.cherryflavor.api.spigot.world.generation.WorldType;
 import net.cherryflavor.api.tools.TextFormat;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.TreeType;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,7 +48,7 @@ public class ServerAPI {
     //==================================================================================================================
 
     public ServerAPI(JavaPlugin plugin) {
-        this.plugin = plugin;
+        ServerAPI.plugin = plugin;
         api = this;
 
         CherryConfig.makeFolder("plugins/CherryAPI");

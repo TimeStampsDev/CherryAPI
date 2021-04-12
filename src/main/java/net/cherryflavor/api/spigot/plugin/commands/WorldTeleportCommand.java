@@ -4,6 +4,8 @@ import net.cherryflavor.api.spigot.ServerAPI;
 import net.cherryflavor.api.spigot.command.ServerCherryCommand;
 import net.cherryflavor.api.spigot.player.OnlinePlayer;
 import net.cherryflavor.api.spigot.world.CherryWorld;
+
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -37,7 +39,7 @@ public class WorldTeleportCommand extends ServerCherryCommand {
      */
     public List<String> getWorldList() {
         List<String> worldList = new ArrayList<>();
-        for (World world : ServerAPI.getAPI().getWorldManager().getWorlds()) {
+        for (World world : Bukkit.getWorlds()) {
             worldList.add(world.getName());
         }
         return  worldList;
@@ -66,7 +68,7 @@ public class WorldTeleportCommand extends ServerCherryCommand {
                 sendColorfulMessage(String.format(ServerAPI.getAPI().getBasicMessages().getString("world-not-exists"), worldEntry));
             }
         } else {
-            player.sendColorfulMessage("&cUsage: /" + label.toLowerCase() + " <world>");
+            sendColorfulMessage("&cUsage: /" + label.toLowerCase() + " <world>");
         }
         return true;
     }

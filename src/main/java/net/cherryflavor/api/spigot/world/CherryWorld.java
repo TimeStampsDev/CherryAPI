@@ -1,16 +1,17 @@
 package net.cherryflavor.api.spigot.world;
 
-import net.cherryflavor.api.configuration.CherryConfig;
-import net.cherryflavor.api.spigot.ServerAPI;
-import net.cherryflavor.api.spigot.event.ServerCherryListener;
-import net.cherryflavor.api.spigot.event.ServerListenerManager;
-import net.cherryflavor.api.spigot.player.OnlinePlayer;
-import net.cherryflavor.api.spigot.plugin.commands.WorldManageCommand;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import com.mysql.fabric.Server;
+
 import org.bukkit.Bukkit;
-import org.bukkit.Difficulty;
 import org.bukkit.World;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,14 +19,13 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDropItemEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.mysql.fabric.Server;
+import net.cherryflavor.api.configuration.CherryConfig;
+import net.cherryflavor.api.spigot.ServerAPI;
+import net.cherryflavor.api.spigot.event.ServerCherryListener;
+import net.cherryflavor.api.spigot.player.OnlinePlayer;
 
 /**
  * Created on 3/2/2021
@@ -37,7 +37,7 @@ public class CherryWorld {
     private String worldName;
     private World world;
     private String permissionAccess;
-    private List<WorldFlag> worldFlags;
+    private List<WorldFlag> worldFlags = new ArrayList<>();
     private int maxPlayersAllowed;
 
     private boolean isLoaded;
@@ -53,29 +53,12 @@ public class CherryWorld {
 
     public CherryWorld(String worldName, int maxPlayersAllowed, List<WorldFlag> worldFlags) {
         this.worldName = worldName;
-        this.permissionAccess = WorldManager.accessPermission + worldName;
-        this.maxPlayersAllowed = maxPlayersAllowed;
-        this.worldFlags = worldFlags;
+    
+        initialize(worldName);
 
-        this.isLoaded = false;
-        this.eventsLoaded = false;
-
-        this.worldFlagEvents = new ArrayList<>();
-
-        if (!new File("plugins/CherryAPI/worlds/" + worldName + ".yml").exists()) {
-            CherryConfig.createFile("plugins/CherryAPI/worlds/" + worldName + ".yml");
-            CherryConfig worldConfig = new CherryConfig(new File("plugins/CherryAPI/worlds/" + worldName + ".yml"));
-            worldConfig.getConfig().set("name", worldName);
-            worldConfig.getConfig().set("maxplayers", maxPlayersAllowed);
-            worldConfig.getConfig().set("flags", worldFlags);
-            worldConfig.saveFile();
-            this.worldConfig = worldConfig;
-        } else {
-            CherryConfig worldConfig = new CherryConfig(new File("plugins/CherryAPI/worlds/" + worldName + ".yml"));
-            this.maxPlayersAllowed = worldConfig.getConfig().getInt("maxplayers");
-            this.worldFlags = WorldFlag.parseStringList(worldConfig.getConfig().getStringList("flags"));
-            this.worldConfig = worldConfig;
-        }
+        worldConfig.getConfig().set("maxplayers", getDefaultMaxPlayersAllowed());
+        worldConfig.getConfig().set("flags", worldFlags);
+        worldConfig.saveFile();
 
         if (Bukkit.getWorld(getWorldName()) == null) {
             ServerAPI.getAPI().getWorldManager().loadWorld(worldName);
@@ -88,29 +71,8 @@ public class CherryWorld {
 
     public CherryWorld(World world) {
         this.worldName = world.getName();
-        this.permissionAccess = WorldManager.accessPermission + worldName;
-        this.worldFlagEvents = new ArrayList<>();
-
-        this.isLoaded = false;
-        this.eventsLoaded = false;
-
-        if (!new File("plugins/CherryAPI/worlds/" + worldName + ".yml").exists()) {
-            this.maxPlayersAllowed = getMaxPlayersAllowed();
-            this.worldFlags = new ArrayList<>();
-            CherryConfig.createFile("plugins/CherryAPI/worlds/" + worldName + ".yml");
-            CherryConfig worldConfig = new CherryConfig(new File("plugins/CherryAPI/worlds/" + worldName + ".yml"));
-            worldConfig.loadFile();
-            worldConfig.getConfig().set("name", worldName);
-            worldConfig.getConfig().set("maxplayers", maxPlayersAllowed);
-            worldConfig.getConfig().set("flags", worldFlags);
-            worldConfig.saveFile();
-            this.worldConfig = worldConfig;
-        } else {
-            CherryConfig worldConfig = new CherryConfig(new File("plugins/CherryAPI/worlds/" + worldName + ".yml"));
-            this.maxPlayersAllowed = worldConfig.getConfig().getInt("maxplayers");
-            this.worldFlags = WorldFlag.parseStringList(worldConfig.getConfig().getStringList("flags"));
-            this.worldConfig = worldConfig;
-        }
+    
+        initialize(this.worldName);
 
         if (Bukkit.getWorld(getWorldName()) == null) {
             ServerAPI.getAPI().getWorldManager().loadWorld(worldName);
@@ -121,30 +83,7 @@ public class CherryWorld {
     }
 
     public CherryWorld(String world) {
-        this.worldName = world;
-        this.permissionAccess = WorldManager.accessPermission + worldName;
-        this.worldFlagEvents = new ArrayList<>();
-
-        this.isLoaded = false;
-        this.eventsLoaded = false;
-
-        if (!new File("plugins/CherryAPI/worlds/" + worldName + ".yml").exists()) {
-            this.maxPlayersAllowed = getMaxPlayersAllowed();
-            this.worldFlags = new ArrayList<>();
-            CherryConfig.createFile("plugins/CherryAPI/worlds/" + worldName + ".yml");
-            CherryConfig worldConfig = new CherryConfig(new File("plugins/CherryAPI/worlds/" + worldName + ".yml"));
-            worldConfig.loadFile();
-            worldConfig.getConfig().set("name", worldName);
-            worldConfig.getConfig().set("maxplayers", maxPlayersAllowed);
-            worldConfig.getConfig().set("flags", worldFlags);
-            worldConfig.saveFile();
-            this.worldConfig = worldConfig;
-        } else {
-            CherryConfig worldConfig = new CherryConfig(new File("plugins/CherryAPI/worlds/" + worldName + ".yml"));
-            this.maxPlayersAllowed = worldConfig.getConfig().getInt("maxplayers");
-            this.worldFlags = WorldFlag.parseStringList(worldConfig.getConfig().getStringList("flags"));
-            this.worldConfig = worldConfig;
-        }
+        initialize(world);
 
         if (Bukkit.getWorld(getWorldName()) == null) {
             ServerAPI.getAPI().getWorldManager().loadWorld(worldName);
@@ -158,12 +97,25 @@ public class CherryWorld {
     // GETTERS
     //==================================================================================================================
 
-    /**
+   /**
      * Returns world flags
      * @return
      */
     public List<WorldFlag> getWorldFlags() {
-        return worldFlags;
+        return ServerAPI.getAPI().getWorldManager().flagMap.get(new CherryWorld(world));
+    }
+
+
+    /**
+     * Returns string list of world flags
+     * @return
+     */
+    public List<String> getWorldFlagStringList() {
+        List<String> sList = new ArrayList<>();
+        for (WorldFlag flag : getWorldFlags()) {
+            sList.add(flag.getConfigTag());
+        }
+        return sList;
     }
 
     /**
@@ -171,7 +123,7 @@ public class CherryWorld {
      * @return
      */
     public CherryConfig getConfig() {
-        return worldConfig;
+        return new CherryConfig(this.worldConfig.getFile());
     }
 
     /**
@@ -214,6 +166,14 @@ public class CherryWorld {
         return maxPlayersAllowed;
     }
 
+    /**
+     * 
+     * @return
+     */
+    public int getDefaultMaxPlayersAllowed() {
+        return ServerAPI.getAPI().getWorldManager().getConfig().getInt("default-max-players-allowed-per-world");
+    }
+
     //==================================================================================================================
     // SETTERS
     //==================================================================================================================
@@ -221,6 +181,36 @@ public class CherryWorld {
     //==================================================================================================================
     // METHODS
     //==================================================================================================================
+
+    /**
+     * Initialize config
+     */
+    public void initialize(String worldName) {
+        this.worldName = worldName;
+        this.worldConfig = new CherryConfig(new File("plugins/CherryAPI/worlds/" + worldName + ".yml"));
+        this.permissionAccess = WorldManager.accessPermission + worldName;
+        this.worldFlagEvents = new ArrayList<>();
+        this.worldFlags.addAll(WorldFlag.parseStringList(this.worldConfig.getConfig().getStringList("flags")));
+        this.isLoaded = false;
+        this.eventsLoaded = false;
+        if (!new File("plugins/CherryAPI/worlds/" + worldName + ".yml").exists()) {
+            this.maxPlayersAllowed = getMaxPlayersAllowed();
+            CherryConfig.createFile("plugins/CherryAPI/worlds/" + worldName + ".yml");
+
+            this.worldConfig.loadFile();
+            this.worldConfig.getConfig().set("name", worldName);
+            this.worldConfig.getConfig().set("maxplayers", getDefaultMaxPlayersAllowed());
+            this.worldConfig.getConfig().set("flags", Collections.EMPTY_LIST);
+
+            this.worldConfig.saveFile();
+     
+        } else {
+            this.maxPlayersAllowed = worldConfig.getConfig().getInt("maxplayers");
+        
+        }
+
+        ServerAPI.getAPI().getWorldManager().flagMap.put(this, worldFlags);
+    }
 
     /**
      * Loads
@@ -231,12 +221,16 @@ public class CherryWorld {
 
             if (eventsLoaded == false) {
                 eventsLoaded = true;
-                ServerAPI.getAPI().getListenerManager().registerListener(
+                ServerAPI.getAPI().getListenerManager().silentRegisterListener(
                         new FALL(),
-                        new PASSIVE_SPAWN(),
                         new HOSTILE_SPAWN(),
-                        new PVP()
+                        new PASSIVE_SPAWN(),
+                        new PVP(),
+                        new BLOCKPLACE(),
+                        new BLOCKDESTROY(),
+                        new NOITEMDROP()
                 );
+                ServerAPI.getAPI().getListenerManager().debug("All Flag-Events have registed for " + worldName);
             }
 
             if (Bukkit.getServer().getWorld(worldName) == null) {
@@ -246,20 +240,19 @@ public class CherryWorld {
                 this.world = Bukkit.getServer().getWorld(worldName);
             }
 
-            if (worldFlags.contains(WorldFlag.NO_HOSTILE_MOBS)) {
-                ServerAPI.getPlugin().getServer().getWorld(worldName).setDifficulty(Difficulty.PEACEFUL);
+            if (getWorldFlagStringList().contains(WorldFlag.NO_HOSTILE_MOBS.getConfigTag())) {
+                new HOSTILE_SPAWN().update();
             }
 
-            if (worldFlags.contains(WorldFlag.NO_PASSIVE_MOBS)) {
-                for (Entity entity : Bukkit.getWorld(worldName).getEntities()) {
-                    if (entity instanceof Creature) {
-                        if (!(entity instanceof Monster)) {
-                            entity.remove();
-                        }
-                    }
-                }
+            if (getWorldFlagStringList().contains(WorldFlag.NO_PASSIVE_MOBS.getConfigTag())) {
+                new PASSIVE_SPAWN().update();
             }
+
         }
+    }
+
+    public void deleteConfigFile() {
+        CherryConfig.deleteFolder(getConfig().getFile());
     }
 
     //==================================================================================================================
@@ -313,6 +306,14 @@ public class CherryWorld {
             }
         }
 
+        public void update() {
+            for (Entity entities : getWorld().getEntities()) {
+                if (entities instanceof Monster) {
+                    entities.remove();
+                }
+            }
+        }
+
     }
 
     public class PASSIVE_SPAWN extends ServerCherryListener {
@@ -337,6 +338,16 @@ public class CherryWorld {
             }
         }
 
+        public void update() {
+            for (Entity entities : getWorld().getEntities()) {
+                if (!(entities instanceof Monster)) {
+                    if (!(entities instanceof Item)) {
+                        entities.remove();
+                    }
+                }
+            }
+        }
+
     }
 
     public class PVP extends ServerCherryListener {
@@ -349,8 +360,6 @@ public class CherryWorld {
         @EventHandler
         public void event(EntityDamageByEntityEvent event) {
             if (event.getEntity() instanceof Player) {
-                Player player = (Player) event.getEntity();
-                OnlinePlayer damaged = new OnlinePlayer(player);
                 if (event.getEntity().getLocation().getWorld().getName().equals(world.getName())) {
                     if (event.getDamager() instanceof Player) {
                         Player attacker = (Player) event.getDamager();
@@ -377,6 +386,8 @@ public class CherryWorld {
         @EventHandler
         public void event(BlockPlaceEvent event) {
             OnlinePlayer player = new OnlinePlayer(event.getPlayer());
+            System.out.print(getWorldFlagStringList().toString());
+            System.out.println(ServerAPI.getAPI().getWorldManager().flagMap.get(new CherryWorld(world)).contains(WorldFlag.BLOCK_PLACE));
             if (getWorldFlags().contains(WorldFlag.BLOCK_PLACE)) {
                 if (!player.hasPermission("cherryapi.flag-override")) {
                     event.setCancelled(true);
@@ -397,7 +408,7 @@ public class CherryWorld {
         @EventHandler
         public void event(BlockBreakEvent event) {
             OnlinePlayer player = new OnlinePlayer(event.getPlayer());
-            if (getWorldFlags().contains(WorldFlag.BLOCK_DESTROY)) {
+            if (getWorldFlagStringList().contains(WorldFlag.BLOCK_DESTROY.getConfigTag())) {
                 if (!player.hasPermission("cherryapi.flag-override")) {
                     event.setCancelled(true);
                     player.sendColorfulMessage(ServerAPI.getAPI().getBasicMessages().getString("blockdestroy-disabled"));
@@ -415,13 +426,13 @@ public class CherryWorld {
         }
 
         @EventHandler
-        public void event(EntityDropItemEvent event) {
+        public void event(PlayerDropItemEvent event) {
             if (getWorldFlags().contains(WorldFlag.NO_ITEM_DROP)) {
-                event.setCancelled(true);
-                if (event.getEntity() instanceof Player) {
-                    Player player = (Player) event.getEntity();
-                    new OnlinePlayer(player).sendColorfulMessage(ServerAPI.getAPI().getBasicMessages().getString("itemdrop-disabled"));               
-                }
+                Player player = (Player) event.getPlayer();
+                if (!player.hasPermission("cherryapi.flag-override")) {
+                    event.setCancelled(true);
+                    new OnlinePlayer(player).sendColorfulMessage(ServerAPI.getAPI().getBasicMessages().getString("itemdrop-disabled"));  
+                }      
             }
         }
 

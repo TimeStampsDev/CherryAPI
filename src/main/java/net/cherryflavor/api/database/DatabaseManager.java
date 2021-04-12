@@ -38,6 +38,8 @@ public class DatabaseManager {
 
         createFolder();
         createConfigFile();
+
+        debug = config.getConfig().getBoolean("debug");
     }
 
     //==================================================================================================================
@@ -97,7 +99,7 @@ public class DatabaseManager {
     }
 
     public void addDatabase(Database database) {
-        if (Database d : databaseList) {
+        for (Database d : databaseList) {
             if (!d.getActualName().equalsIgnoreCase(database.getActualName())) {
                 databaseList.add(database);
             }

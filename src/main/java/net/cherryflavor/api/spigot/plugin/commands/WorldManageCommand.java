@@ -14,8 +14,11 @@ import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -37,8 +40,9 @@ public class WorldManageCommand extends ServerCherryCommand {
 
 
         getHelpPage().addCommandHelp("/worldmng list", "Lists all worlds");
-        getHelpPage().addCommandHelp("/worldmng create <worldname> <worldtype>", "Creates a world, Types: FLAT, NORMAL, END, NETHER, VOID");
+        getHelpPage().addCommandHelp("/worldmng create <worldname> <worldtype>", "Creates a world\nTypes: FLAT, NORMAL, END, NETHER, VOID");
         getHelpPage().addCommandHelp("/worldmng delete <worldname>", "Deletes a world");
+        getHelpPage().addCommandHelp("/worldmng load <premadeworld>", "Loads premade world\nName must be exact same as folder");
         getHelpPage().addCommandHelp("/worldmng info <world>", "Gets information of world");
         getHelpPage().addCommandHelp("/worldmng setspawn <world>", "Sets spawn for world");
         getHelpPage().addCommandHelp("/worldmng setmaxplayers <world> <max>", "Sets max amount of players for world");
@@ -110,6 +114,7 @@ public class WorldManageCommand extends ServerCherryCommand {
             case "setmaxplayers" : sendColorfulMessage("&cUsage: /worldmng setmaxplayers <world> <max>"); break;
             case "addflag" : sendColorfulMessage("&cUsage: /worldmng addflag <worldname> <flag>"); break;
             case "removeflag" : sendColorfulMessage("&cUsage: /worldmng removeflag <worldname> <flag>"); break;
+            case "load" : sendColorfulMessage("&cUsage: /worldmng load <premadeworld>");
             default: sendColorfulMessage("&cUsage: /worldmng help [1-" + getHelpPage().getNumberOfPages() + "]");
         }
         return true;
@@ -134,9 +139,13 @@ public class WorldManageCommand extends ServerCherryCommand {
                 int n = 0;
                 int size = WorldFlag.values().length;
                 sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("flags-list-message"), size + " flag" + TextFormat.pluralization(size)));
+                int labelmax = (TextFormat.getLongestString(WorldFlag.stringLabelList()).length()+10);
+                getAPI().debug("Longest String for Labels : " + TextFormat.getLongestString(WorldFlag.stringLabelList()) + " Length: " + labelmax);
+                int descmax = (TextFormat.getLongestString(WorldFlag.stringDescList()).length()+1);
+                sendColorfulMessage(TextFormat.addRightPadding("     &eName:", ' ', labelmax) + "&7" + TextFormat.addRightPadding("Description:", ' ', descmax) + "&f" + "Tag:");
                 for (WorldFlag flag : WorldFlag.values()) {
                     n++;
-                    sendColorfulMessage("&7#" + n + " &e" + TextFormat.addRightPadding(flag.getLabel(), ' ', 20) + "&7" + flag.getDescription());
+                    sendColorfulMessage(TextFormat.addRightPadding("&7#" + n + " &e" + flag.getLabel(), ' ', labelmax) + "&7" + TextFormat.addRightPadding(flag.getDescription(), ' ', descmax) + "&f" + flag.getConfigTag());
                 }
             } else {
                 situationArg(args[0]);
@@ -176,8 +185,12 @@ public class WorldManageCommand extends ServerCherryCommand {
             } else if (args[0].equalsIgnoreCase("load")) {
                 if (Bukkit.getWorld(args[1]) == null) {
                     String worldPremade = args[1];
-                    getAPI().getWorldManager().loadWorld(worldPremade);
-                    sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("world-successfully-loaded"), worldPremade));
+                    if (new File(worldPremade).exists()) {
+                        getAPI().getWorldManager().loadWorld(worldPremade);
+                        sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("world-successfully-loaded"), worldPremade));
+                    } else {
+                        sendColorfulMessage(String.format(ServerAPI.getAPI().getBasicMessages().getString("premade-not-exists"), worldPremade));
+                    }
                 } else {
                     sendColorfulMessage(String.format(ServerAPI.getAPI().getBasicMessages().getString("world-exists"), args[1]));
                     sendColorfulMessage("&cWorld names are case sensitive.");
@@ -251,8 +264,8 @@ public class WorldManageCommand extends ServerCherryCommand {
                     }
                 }
             } else if (args[0].equalsIgnoreCase("create")) {
-                if (Bukkit.getWorld(args[1]) == null) {
-                    sendColorfulMessage(String.format(ServerAPI.getAPI().getBasicMessages().getString("world-not-exists"), args[1]));
+                if (Bukkit.getWorld(args[1]) != null) {
+                    sendColorfulMessage(String.format(ServerAPI.getAPI().getBasicMessages().getString("world-exists"), args[1]));
                     sendColorfulMessage("&cWorld names are case sensitive.");
                 } else {
                     WorldType type = null;
@@ -264,9 +277,11 @@ public class WorldManageCommand extends ServerCherryCommand {
                         type = WorldType.parse(args[2]);
                     }
 
+                    sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("world-generating"), worldName));
+
                     getAPI().getWorldManager().generateWorld(type, worldName);
                     
-                    sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("world-generated"), worldName, type.name()));
+                    sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("world-generated"), worldName, type.getName()));
                 }
             } else {
                 situationArg(args[0]);
@@ -400,8 +415,8 @@ public class WorldManageCommand extends ServerCherryCommand {
                     }
                 }
             } else if (args[0].equalsIgnoreCase("create")) {
-                if (Bukkit.getWorld(args[1]) == null) {
-                    sendColorfulMessage(String.format(ServerAPI.getAPI().getBasicMessages().getString("world-not-exists"), args[1]));
+                if (Bukkit.getWorld(args[1]) != null) {
+                    sendColorfulMessage(String.format(ServerAPI.getAPI().getBasicMessages().getString("world-exists"), args[1]));
                     sendColorfulMessage("&cWorld names are case sensitive.");
                 } else {
                     WorldType type = null;
@@ -413,9 +428,11 @@ public class WorldManageCommand extends ServerCherryCommand {
                         type = WorldType.parse(args[2]);
                     }
 
+                    sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("world-generating"), worldName));
+
                     getAPI().getWorldManager().generateWorld(type, worldName);
                     
-                    sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("world-generated"), worldName, type.name()));
+                    sendColorfulMessage(String.format(getAPI().getBasicMessages().getString("world-generated"), worldName, type.getName()));
                 }
             } else {
                 situationArg(args[0]);

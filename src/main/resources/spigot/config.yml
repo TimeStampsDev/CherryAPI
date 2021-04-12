@@ -1,1 +1,6 @@
 debug: true
+vote-notifications: 
+  reminder-intervals: [100, 90, 80, 70, 60, 50, 40, 30, 20, 15, 10, 5, 4, 3, 2, 1]
+vote-ballots:
+  inventory:
+    candidate-material-id: "PAPER"

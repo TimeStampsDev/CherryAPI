@@ -1,7 +1,6 @@
 package net.cherryflavor.api.bungee.event;
 
 import net.md_5.bungee.api.plugin.Listener;
-import net.md_5.bungee.event.EventHandler;
 
 /**
  * Created on 2/20/2021

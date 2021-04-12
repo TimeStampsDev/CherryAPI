@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
-import java.nio.file.Path;
-
 /**
  * Created on 2/20/2021
  * Time 12:32 AM
@@ -46,7 +44,7 @@ public class CherryConfig {
     }
 
     public File getFile() { return this.file; }
-    public Configuration getConfig() { return this.configuration; }
+    public Configuration getConfig() { return loadConfigOfFile(this.file); }
 
     public static final InputStream getResourceAsStream(String resource) {
         return CherryConfig.class.getClassLoader().getResourceAsStream(resource);
@@ -69,6 +67,20 @@ public class CherryConfig {
     //==================================================================================================================
     // METHODS
     //==================================================================================================================
+
+    public static void deleteFolder(File folder) {
+        File[] files = folder.listFiles();
+        if (files != null) {
+            for (File f : files) {
+                if (f.isDirectory()) {
+                    deleteFolder(f);
+                } else {
+                    f.delete();
+                }
+            }
+        }
+        folder.delete();
+    }
 
     public static void makeFolder(String folderName) {
         new File(folderName).mkdirs();

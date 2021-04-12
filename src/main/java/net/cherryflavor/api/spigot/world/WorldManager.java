@@ -11,6 +11,7 @@ import net.cherryflavor.api.spigot.world.generation.chunkgeneration.FlatWorldChu
 import net.cherryflavor.api.spigot.world.generation.chunkgeneration.VoidWorldChunkGeneration;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
@@ -18,7 +19,9 @@ import org.bukkit.generator.BlockPopulator;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created on 2/20/2021
@@ -35,6 +38,8 @@ public class WorldManager {
     private List<CherryWorld> cherryWorlds;
     private Configuration config;
 
+    public Map<CherryWorld, List<WorldFlag>> flagMap = new HashMap<>();
+
     public static int basicChunkLength = 16;
 
     //==================================================================================================================
@@ -45,7 +50,7 @@ public class WorldManager {
      * @param api
      */
     public WorldManager(ServerAPI api) {
-        this.serverAPI = serverAPI;
+        serverAPI = api;
         this.worlds = serverAPI.getServer().getWorlds();
         this.cherryWorlds = new ArrayList<>();
         config = new CherryConfig(new File("plugins/CherryAPI/worldmanage.yml")).getConfig();
@@ -110,101 +115,76 @@ public class WorldManager {
     // METHODS
     //==================================================================================================================
 
+    public void saveFlagLists() {
+        for (CherryWorld world : getCherryWorlds()) {
+            CherryConfig wC = world.getConfig();
+            wC.getConfig().set("flags", WorldFlag.convertToConfigList(flagMap.get(world)));
+            wC.saveFile();;
+        }
+    }
+
     /**
      * Generates a new World!
      */
     public void generateWorld(WorldType type, String worldName, BlockPopulator... blockPopulators) {
-        worldName = worldName.toLowerCase();
-        if (type == WorldType.FLAT) {
-
-            if (getAPI().getServer().getWorld(worldName) == null) {
+        if (getAPI().getServer().getWorld(worldName) != null) {
+            throw new WorldManageException(worldName + " already exists, try another name");
+        } else {
+            if (type == WorldType.FLAT) {
 
                 FlatWorldChunkGenerator flatWorldChunkGenerator = new FlatWorldChunkGenerator(getAPI());
-
+    
                 for (BlockPopulator blockPopulator : blockPopulators) {
                     flatWorldChunkGenerator.addBlockPopulator(blockPopulator);
                 }
-
+    
                 WorldCreator newWorld = new WorldCreator(worldName);
-
+    
                 newWorld.generator(flatWorldChunkGenerator);
-
+    
                 newWorld.createWorld();
-
-                getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
-            } else {
-                throw new WorldManageException(worldName + " already exists, try another name");
-            }
-
-        } else if (type == WorldType.NORMAL) {
-
-            if (getAPI().getServer().getWorld(worldName) == null) {
-
+    
+            } else if (type == WorldType.NORMAL) {
+    
                 WorldCreator newWorld = new WorldCreator(worldName);
                 newWorld.environment(World.Environment.NORMAL);
-
+    
                 newWorld.createWorld();
-
-                getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
-            } else {
-                throw new WorldManageException(worldName + " already exists, try another name");
-            }
-
-        } else if (type == WorldType.END) {
-
-            if (getAPI().getServer().getWorld(worldName) == null) {
-
+    
+            } else if (type == WorldType.END) {
+    
                 WorldCreator newWorld = new WorldCreator(worldName);
                 newWorld.environment(World.Environment.THE_END);
-
+    
                 newWorld.createWorld();
-
-                getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
-
-            } else {
-                throw new WorldManageException(worldName + " already exists, try another name");
-            }
-
-        } else if (type == WorldType.NETHER) {
-
-            if (getAPI().getServer().getWorld(worldName) == null) {
-
-                WorldCreator newWorld = new WorldCreator(worldName);
-                newWorld.environment(World.Environment.NETHER);
-
-                newWorld.createWorld();
-
-                getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
-
-            } else {
-                throw new WorldManageException(worldName + " already exists, try another name");
-            }
-
-        } else if (type == WorldType.VOID) {
-            
-            if (getAPI().getServer().getWorld(worldName) == null) {
-
+    
+            } else if (type == WorldType.NETHER) {
+    
+                    WorldCreator newWorld = new WorldCreator(worldName);
+                    newWorld.environment(World.Environment.NETHER);
+    
+                    newWorld.createWorld();
+    
+            } else if (type == WorldType.VOID) {
+                
                 VoidWorldChunkGeneration voidWorldChunkGeneration = new VoidWorldChunkGeneration(getAPI());
-
+    
                 for (BlockPopulator blockPopulator : blockPopulators) {
                     voidWorldChunkGeneration.addBlockPopulator(blockPopulator);
                 }
-
+    
                 WorldCreator newWorld = new WorldCreator(worldName);
-
+    
                 newWorld.generator(voidWorldChunkGeneration);
-
+    
                 newWorld.createWorld();
-
-                getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
-
+    
             } else {
-                throw new WorldManageException(worldName + " already exists, try another name");
+                throw new WorldManageException("Invalid WorldType provided");
             }
-
-        } else {
-            throw new WorldManageException("Invalid WorldType provided");
         }
+
+        getAPI().debug(getDebugPrefix() + " " + worldName + " has been successfully created");
 
         CherryWorld world = new CherryWorld(Bukkit.getWorld(worldName.toLowerCase()));
         world.load();
@@ -244,7 +224,7 @@ public class WorldManager {
      */
     public void loadWorld(String worldFolderName) {
         if (new File(worldFolderName).exists()) {
-            if (getAPI().getServer().getWorld(worldFolderName) != null) {
+            if (getAPI().getServer().getWorld(worldFolderName) == null) {
                 new WorldCreator(worldFolderName).createWorld();
                 getAPI().debug(getDebugPrefix() + " " + worldFolderName + " has been successfully loaded");
             }
@@ -262,6 +242,7 @@ public class WorldManager {
                     || vanilla.getName().equals("world_the_end")
                     || vanilla.getName().equals("world_nether")) {
                 CherryWorld world = new CherryWorld(vanilla.getName());
+                world.load();
             }
         }
     }
@@ -285,6 +266,9 @@ public class WorldManager {
      */
     public void saveWorlds() {
         for (CherryWorld world : cherryWorlds) {
+            for (Chunk c : world.getWorld().getLoadedChunks()) {
+                c.unload();
+            }
             world.getWorld().save();
             ServerAPI.getAPI().debug(getDebugPrefix() + " " + world.getWorldName() + " has been saved");
         }
@@ -297,6 +281,8 @@ public class WorldManager {
             World w = getAPI().getServer().getWorld(world);
             World def = getAPI().getServer().getWorlds().get(0); // default world 'world' or whatever is input for server.properties
 
+            CherryWorld cw = new CherryWorld(w);
+
             for (Player p : w.getPlayers()) {
                 p.teleport(def.getSpawnLocation());
             }
@@ -304,7 +290,9 @@ public class WorldManager {
             unloadWorld(world);
 
             File f = new File(world);
-            f.delete();
+            CherryConfig.deleteFolder(f);
+
+            cw.deleteConfigFile();
         }
     }
 
@@ -313,9 +301,12 @@ public class WorldManager {
      */
     public void addFlag(CherryWorld world, WorldFlag flag) {
         List<WorldFlag> flags = WorldFlag.parseStringList(world.getConfig().getConfig().getStringList("flags"));
+        List<WorldFlag> mapFlags = flagMap.get(world);
         if (!flags.contains(flag)) {
             flags.add(flag);
-            world.getConfig().getConfig().set("flags", WorldFlag.convertToConfigList(flags));
+            mapFlags.add(flag);
+            flagMap.put(world, mapFlags);
+            world.getConfig().getConfig().set("flags", WorldFlag.convertToConfigList(mapFlags));
             world.getConfig().saveFile();
             WorldFlagAddEvent event = new WorldFlagAddEvent(world,flag);
             Bukkit.getPluginManager().callEvent(event);
@@ -330,9 +321,12 @@ public class WorldManager {
      */
     public void removeFlag(CherryWorld world, WorldFlag flag) {
         List<WorldFlag> flags = WorldFlag.parseStringList(world.getConfig().getConfig().getStringList("flags"));
+        List<WorldFlag> mapFlags = flagMap.get(world);
         if (flags.contains(flag)) {
             flags.remove(flag);
-            world.getConfig().getConfig().set("flags", WorldFlag.convertToConfigList(flags));
+            mapFlags.remove(flag);
+            flagMap.put(world, mapFlags);
+            world.getConfig().getConfig().set("flags", WorldFlag.convertToConfigList(mapFlags));
             world.getConfig().saveFile();
             WorldFlagRemoveEvent event = new WorldFlagRemoveEvent(world, flag);
             Bukkit.getPluginManager().callEvent(event);

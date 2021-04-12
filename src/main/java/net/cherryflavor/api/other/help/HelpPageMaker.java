@@ -38,7 +38,7 @@ public class HelpPageMaker extends PageMaker {
         String cmdColor = getBasicMessages().getString("help.command-color");
         String descColor = getBasicMessages().getString("help.description-color");
         addData(cmdColor + subCommand);
-        addData("__" + descColor + description);
+        addData("__" + descColor + description.replace("\n", "\n__"));
     }
 
     //==================================================================================================================

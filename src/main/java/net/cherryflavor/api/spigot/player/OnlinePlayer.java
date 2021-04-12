@@ -12,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -90,10 +91,25 @@ public class OnlinePlayer extends User {
     public boolean exists() { return (player != null); }
 
     /**
-     *
+     * Gets Location
      * @return
      */
     public Location getLocation() { return player.getLocation(); }
+
+    /**
+     * Converts Player List to String List
+     * @param players
+     * @return
+     */
+    public static List<String> convertPlayerListToStringList(List<Player> players) {
+        List<String> sList = new ArrayList<>();
+
+        for (Player p : players) {
+            sList.add(p.getName());
+        }
+
+        return sList;
+    }
 
     //==================================================================================================================
     // METHODS

@@ -1,6 +1,5 @@
 package net.cherryflavor.api.spigot.event;
 
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 /**

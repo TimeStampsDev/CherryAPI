@@ -2,17 +2,13 @@ package net.cherryflavor.api.spigot.world.generation.chunkgeneration;
 
 import net.cherryflavor.api.spigot.ServerAPI;
 import net.cherryflavor.api.spigot.world.WorldManager;
-import org.bukkit.Chunk;
 import org.bukkit.Material;
-import org.bukkit.TreeType;
 import org.bukkit.World;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.util.noise.SimplexOctaveGenerator;
-import sun.reflect.generics.tree.TypeTree;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 

@@ -1,11 +1,11 @@
 package net.cherryflavor.api.tools;
 
-import net.cherryflavor.api.chat.tools.ChatColor;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.chat.ComponentSerializer;
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import net.md_5.bungee.api.ChatColor;
 
 /**
  * Created on 2/20/2021
@@ -91,6 +91,85 @@ public class TextFormat {
         }
 
         return list;
+    }
+
+     /**
+     * Convert String Array to List
+     * @return
+     */
+    public static List<String> convertArrayStringToList(String... array) {
+        List<String> list = new ArrayList<>();
+
+        for (String s : array) {
+            list.add(s);
+        }
+
+        return list;
+    }
+
+    /**
+     * Ex. "TESTING_THIS_NEW_PLUGIN" => "Testing This New Plugin"
+     * @param s
+     * @return
+     */
+    public static String toCamelCase(String s){
+        String[] parts = s.split("_");
+        String camelCaseString = "";
+        int n = 0;
+        for (String part : parts){
+            n++;
+            if (n == parts.length) {
+                camelCaseString = camelCaseString + toProperCase(part);
+            } else {
+                camelCaseString = camelCaseString + toProperCase(part) + " ";
+            }
+        }
+        return camelCaseString;
+     }
+
+     /**
+      * Upper Case first letter, then Lower case the rest
+      * @param s
+      * @return
+      */
+     public static String toProperCase(String s) {
+        return s.substring(0, 1).toUpperCase() +
+                   s.substring(1).toLowerCase();
+    }
+
+    /**
+     * Gets Shortest String in a list
+     * @param stringList
+     * @return
+     */
+    public static String getShortestString(List<String> stringList) {
+        String shortest = stringList.get(0);
+
+        for (String str : stringList) {
+            if (str.length() < shortest.length()) {
+                shortest = str;
+            }
+        }
+
+        return shortest;
+    }
+
+    /**
+     * Gets Longest String in a list
+     * @param stringList
+     * @return
+     */
+    public static String getLongestString(List<String> stringList) {
+
+        String longest = stringList.get(0);
+
+        for (String str : stringList) {
+            if (str.length() > longest.length()) {
+                longest = str;
+            }
+        }
+
+        return longest;
     }
 
 }
